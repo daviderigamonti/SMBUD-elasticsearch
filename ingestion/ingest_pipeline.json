@@ -1,0 +1,175 @@
+{
+  "description": "Vaccines administrations ingest pipeline",
+  "processors": [
+    {
+        "csv": {
+            "field": "message",
+            "target_fields": [
+                "data_somministrazione",
+                "fornitore",
+                "area",
+                "fascia_anagrafica",
+                "sesso_maschile",
+                "sesso_femminile",
+                "prima_dose",
+                "seconda_dose",
+                "pregressa_infezione",
+                "dose_addizionale_booster",
+                "codice_NUTS1",
+                "codice_NUTS2",
+                "codice_regione_ISTAT",
+                "nome_area"
+            ],
+            "ignore_missing": false
+        }
+    },
+    {
+        "rename": {
+            "field": "data_somministrazione",
+            "target_field": "administration_date"
+        }
+    },
+    {
+        "rename": {
+            "field": "fornitore",
+            "target_field": "supplier"
+        }
+    },
+    {
+        "rename": {
+            "field": "fascia_anagrafica",
+            "target_field": "age_range"
+        }
+    },
+    {
+        "rename": {
+            "field": "sesso_maschile",
+            "target_field": "male_gender"
+        }
+    },
+    {
+        "rename": {
+            "field": "sesso_femminile",
+            "target_field": "female_gender"
+        }
+    },
+    {
+        "rename": {
+            "field": "prima_dose",
+            "target_field": "first_dose"
+        }
+    },
+    {
+        "rename": {
+            "field": "seconda_dose",
+            "target_field": "second_dose"
+        }
+    },
+    {
+        "rename": {
+            "field": "pregressa_infezione",
+            "target_field": "previous_infection"
+        }
+    },
+    {
+        "rename": {
+            "field": "dose_addizionale_booster",
+            "target_field": "booster_dose"
+        }
+    },
+    {
+        "rename": {
+            "field": "codice_NUTS1",
+            "target_field": "NUTS1_code"
+        }
+    },
+    {
+        "rename": {
+            "field": "codice_NUTS2",
+            "target_field": "NUTS2_code"
+        }
+    },
+    {
+        "rename": {
+            "field": "codice_regione_ISTAT",
+            "target_field": "ISTAT_region_code"
+        }
+    },
+    {
+        "rename": {
+            "field": "nome_area",
+            "target_field": "area_name"
+        }
+    },
+    {
+        "date": {
+            "field": "administration_date",
+            "timezone": "{{ event.timezone }}",
+            "formats": [
+                "ISO8601"
+            ]
+        }
+    },
+    {
+        "convert": {
+            "field": "ISTAT_region_code",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "booster_dose",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "previous_infection",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "first_dose",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "second_dose",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "female_gender",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "convert": {
+            "field": "male_gender",
+            "type": "long",
+            "ignore_missing": true
+        }
+    },
+    {
+        "script": {
+            "lang": "painless",
+            "source": "ctx['total_doses'] = ctx['first_dose'] + ctx['second_dose'] + ctx['booster_dose'] + ctx['previous_infection']",
+            "description": "Create custom total_doses field"
+        }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    }
+  ]
+}

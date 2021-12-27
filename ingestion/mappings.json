@@ -1,0 +1,53 @@
+{
+    "properties": {
+        "@timestamp": {
+            "type": "date"
+        },
+        "administration_date": {
+            "type": "date",
+            "format": "iso8601"
+        },
+        "supplier": {
+            "type": "keyword"
+        },
+        "area": {
+            "type": "keyword"
+        },
+        "age_range": {
+            "type": "keyword"
+        },
+        "male_gender": {
+            "type": "long"
+        },
+        "female_gender": {
+            "type": "long"
+        },
+        "first_dose": {
+            "type": "long"
+        },
+        "second_dose": {
+            "type": "long"
+        },
+        "previous_infection": {
+            "type": "long"
+        },
+        "booster_dose": {
+            "type": "long"
+        },
+        "total_doses": {
+            "type": "long"
+        },
+        "NUTS1_code": {
+            "type": "keyword"
+        },
+        "NUTS2_code": {
+            "type": "keyword"
+        },
+        "ISTAT_region_code": {
+            "type": "keyword"
+        },
+        "area_name": {
+            "type": "text"
+        }
+    }
+}
