@@ -1,0 +1,147 @@
+1- number of daily vaccines for each dose (1,2 or booster)
+2- number of vaccines per genre in each region
+3- number of vaccines in each region (divided in 1,2, booster)
+4- number of doses for each vax brand
+5- number of doses per NUTS1 (NE,NO,C,S,isole)
+6- people with pregressa_infezione per region
+7- vaccines per age range
+8- average doses per region
+
+
+1-- number of daily vaccines for each dose (1,2 or booster)
+GET /vaccines/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "data_somministrazione"
+      },
+      "aggs": {
+        "totalFirstDoses": {
+          "sum": {
+            "field": "prima_dose"
+          }
+        },        
+        "totalSecondDoses": {
+          "sum": {
+            "field": "seconda_dose"
+          }
+        },        
+        "totalBoosters": {
+          "sum": {
+            "field": "dose_addizionale_booster"
+          }
+        }
+      }
+    }
+  } 
+}
+
+2- number of vaccines per genre in each region
+GET /vaccines/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "nome_area"
+      },
+      "aggs": {
+        "totalWomenDoses": {
+          "sum": {
+            "field": "sesso_femminile"
+          }
+        },        
+        "totalMenDoses": {
+          "sum": {
+            "field": "sesso_maschile"
+          }
+        }
+      }
+    }
+  } 
+}
+
+3- number of vaccines in each region (divided in 1,2, booster)
+GET /vaccines/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "nome_area"
+      },
+      "aggs": {
+        "totalFirstDoses": {
+          "sum": {
+            "field": "prima_dose"
+          }
+        },        
+        "totalSecondDoses": {
+          "sum": {
+            "field": "seconda_dose"
+          }
+        },        
+        "totalBoosters": {
+          "sum": {
+            "field": "dose_addizionale_booster"
+          }
+        }
+      }
+    }
+  } 
+}
+
+4- number of doses for each vax brand
+
+5 -- number of doses per NUTS1
+GET /vaccines/_search
+{"size":0,
+  "aggs": {
+    "by_NUTS1": {
+      "terms": {
+        "field": "codice_NUTS1"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+
+      }
+    }
+  }
+}
+
+
+7 -- vaccines by age range
+GET /vaccines/_search
+{"size":0,
+  "aggs": {
+    "by_age": {
+      "terms": {
+        "field": "fascia_anagrafica"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { "script" : "doc['sesso_maschile'].value + doc['sesso_femminile'].value" } }
+      }
+    }
+  }
+}
+7 bis -- group by age and region
+GET /vaccines/_search
+{"size":0,
+  "aggs": {
+    "genres_and_products": {
+      "multi_terms": {
+        "terms": [{
+          "field": "fascia_anagrafica" 
+        }, {
+          "field": "area"
+        }], 
+        "size": 1000
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+      }
+    }
+  }
+}
