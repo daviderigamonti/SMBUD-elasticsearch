@@ -167,6 +167,13 @@
         }
     },
     {
+        "script": {
+            "lang": "painless",
+            "source": "ctx['ISTAT_region_code'] = ctx['ISTAT_region_code'].toString().length() == 1 ? '0' + ctx['ISTAT_region_code'] : ctx['ISTAT_region_code']",
+            "description": "Add a leading '0' for single-digit ISTAT codes in order to properly display data on maps"
+        }
+    },
+    {
       "remove": {
         "field": "message"
       }
