@@ -1,0 +1,47 @@
+{
+  "description": "Total Population for area ingest pipeline",
+  "processors": [
+    {
+      "csv": {
+        "field": "message",
+        "target_fields": [
+          "area",
+          "nome_area",
+          "fascia_anagrafica",
+          "totale_popolazione"
+        ],
+        "ignore_missing": false
+      }
+    },
+    {
+      "rename": {
+        "field": "fascia_anagrafica",
+        "target_field": "age_range"
+      }
+    },
+    {
+      "rename": {
+        "field": "nome_area",
+        "target_field": "area_name"
+      }
+    },
+    {
+      "rename": {
+        "field": "totale_popolazione",
+        "target_field": "total_population"
+      }
+    },
+    {
+      "convert": {
+        "field": "totale_popolazione",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    }
+  ]
+}
