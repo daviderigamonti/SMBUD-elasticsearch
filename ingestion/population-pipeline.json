@@ -33,7 +33,7 @@
     },
     {
       "convert": {
-        "field": "totale_popolazione",
+        "field": "total_population",
         "type": "long",
         "ignore_missing": true
       }
