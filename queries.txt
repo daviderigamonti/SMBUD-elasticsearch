@@ -108,8 +108,19 @@ GET /vaccines/_search
 
 
 4 -- number of doses for each vax brand
-
-#TODO#
+GET /vaccines/_search
+{"size":0,
+  "aggs": {
+    "supplier": {
+      "terms": {
+        "field": "fornitore"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+      }
+    }
+  }
+}
 
 
 5 -- number of doses per NUTS1
@@ -123,17 +134,31 @@ GET /vaccines/_search
       },
       "aggs": {
         "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
-
       }
     }
   }
 }
 
 
-6 -- people with pregressa_infezione per region
-
-#TODO#
-
+6 -- people with previous infection per region
+GET /vaccines/_search
+{
+  "size":0,
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "nome_area"
+      },
+      "aggs": {
+        "People with previous infection": {
+          "sum": {
+            "field": "pregressa_infezione"
+          }
+        }
+      }
+    }
+  }
+}
 
 7 -- vaccines by age range
 
@@ -175,8 +200,21 @@ GET /vaccines/_search
 
 
 8 -- average doses per region
-
-#TODO#
+GET /vaccines/_search
+{"size":0,
+  "aggs": {
+    "area": {
+      "terms": {
+        "field": "area"
+      },
+      "aggs": {
+        "total_doses" : { "avg": {
+          "field": "total_doses"
+        } } 
+      }
+    }
+  }
+}
 
 
 9 -- Adding total number of vaccinations to the index (Should be in the import pipeline)
