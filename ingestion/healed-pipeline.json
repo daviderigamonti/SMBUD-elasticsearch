@@ -33,7 +33,7 @@
     },
     {
       "convert": {
-        "field": "totale_guariti",
+        "field": "total_healed",
         "type": "long",
         "ignore_missing": true
       }
