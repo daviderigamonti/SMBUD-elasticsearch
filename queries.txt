@@ -15,28 +15,28 @@
 
 1 -- number of daily vaccines for each dose (1,2 or booster)
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {
 "size": 0, 
   "aggs": {
     "Region": {
       "terms": {
-        "field": "data_somministrazione"
+        "field": "administration_date"
       },
       "aggs": {
         "totalFirstDoses": {
           "sum": {
-            "field": "prima_dose"
+            "field": "first_dose"
           }
         },        
         "totalSecondDoses": {
           "sum": {
-            "field": "seconda_dose"
+            "field": "second_dose"
           }
         },        
         "totalBoosters": {
           "sum": {
-            "field": "dose_addizionale_booster"
+            "field": "booster_dose"
           }
         }
       }
