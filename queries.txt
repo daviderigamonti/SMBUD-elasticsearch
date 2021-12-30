@@ -48,25 +48,26 @@ GET /vaccines/_search
 }
 
 
-2 -- number of vaccines per genre in each region
+2 -- number of vaccines per gender in each region
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {
 "size": 0, 
   "aggs": {
     "Region": {
       "terms": {
-        "field": "nome_area"
+        "field": "area",
+        "size": 21
       },
       "aggs": {
         "totalWomenDoses": {
           "sum": {
-            "field": "sesso_femminile"
+            "field": "female_gender"
           }
         },        
         "totalMenDoses": {
           "sum": {
-            "field": "sesso_maschile"
+            "field": "male_gender"
           }
         }
       }
@@ -75,30 +76,36 @@ GET /vaccines/_search
 }
 
 
-3 -- number of vaccines in each region (divided in 1,2, booster)
+3 -- number of vaccines in each region (divided in 1,2, booster and total vaccinations)
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {
 "size": 0, 
   "aggs": {
     "Region": {
       "terms": {
-        "field": "nome_area"
+        "field": "area",
+        "size": 21
       },
       "aggs": {
         "totalFirstDoses": {
           "sum": {
-            "field": "prima_dose"
+            "field": "first_dose"
           }
         },        
         "totalSecondDoses": {
           "sum": {
-            "field": "seconda_dose"
+            "field": "second_dose"
           }
         },        
         "totalBoosters": {
           "sum": {
-            "field": "dose_addizionale_booster"
+            "field": "booster_dose"
+          }
+        },        
+        "totalDoses": {
+          "sum": {
+            "field": "total_doses"
           }
         }
       }
@@ -108,15 +115,19 @@ GET /vaccines/_search
 
 
 4 -- number of doses for each vax brand
-GET /vaccines/_search
+
+GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
     "supplier": {
       "terms": {
-        "field": "fornitore"
+        "field": "supplier"
       },
       "aggs": {
-        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+        "total_doses" : { "sum" : {
+          "field": "total_doses"
+          }
+        }
       }
     }
   }
@@ -125,15 +136,18 @@ GET /vaccines/_search
 
 5 -- number of doses per NUTS1
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
     "by_NUTS1": {
       "terms": {
-        "field": "codice_NUTS1"
+        "field": "NUTS1_code"
       },
       "aggs": {
-        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+        "total_doses" : { "sum" : {
+          "field": "total_doses"
+          }
+        }
       }
     }
   }
@@ -141,18 +155,19 @@ GET /vaccines/_search
 
 
 6 -- people with previous infection per region
-GET /vaccines/_search
+
+GET /index-vaccines_administrations/_search
 {
   "size":0,
   "aggs": {
     "Region": {
       "terms": {
-        "field": "nome_area"
+        "field": "area"
       },
       "aggs": {
         "People with previous infection": {
           "sum": {
-            "field": "pregressa_infezione"
+            "field": "previous_infection"
           }
         }
       }
@@ -162,15 +177,18 @@ GET /vaccines/_search
 
 7 -- vaccines by age range
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
     "by_age": {
       "terms": {
-        "field": "fascia_anagrafica"
+        "field": "age_range"
       },
       "aggs": {
-        "total_doses" : { "sum" : { "script" : "doc['sesso_maschile'].value + doc['sesso_femminile'].value" } }
+        "total_doses" : { "sum" : { 
+          "field": "total_doses"
+          }
+        }
       }
     }
   }
@@ -179,20 +197,23 @@ GET /vaccines/_search
 
 7 bis -- group by age and region
 
-GET /vaccines/_search
+GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
     "genres_and_products": {
       "multi_terms": {
         "terms": [{
-          "field": "fascia_anagrafica" 
+          "field": "age_range" 
         }, {
           "field": "area"
         }], 
         "size": 1000
       },
       "aggs": {
-        "total_doses" : { "sum" : { "script" : "doc['sesso_femminile'].value + doc['sesso_maschile'].value" } }
+        "total_doses" : { "sum" : { 
+          "field": "total_doses"
+          } 
+        }
       }
     }
   }
@@ -200,7 +221,8 @@ GET /vaccines/_search
 
 
 8 -- average doses per region
-GET /vaccines/_search
+
+GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
     "area": {
@@ -217,73 +239,9 @@ GET /vaccines/_search
 }
 
 
-9 -- Adding total number of vaccinations to the index (Should be in the import pipeline)
+9 -- Number of vaccinations for age group & type of vaccine
 
-PUT /vaccines_administrations/_mapping
-{
-  "properties": {
-    "total_vaccinations": {
-      "type": "long"
-    }
-  }
-}
-
-POST vaccines_administrations/_update_by_query
-{
-  "script": {
-    "source": "ctx._source.total_vaccinations = ctx._source.prima_dose + ctx._source.seconda_dose + ctx._source.dose_addizionale_booster",
-    "lang": "painless"
-  }
-}
-
-
-10 -- Total number of vaccinations for each region
-
-POST vaccines_administrations/_search
-{
-  "size": 0,
-  "aggs": {
-    "regions": {
-      "terms": { 
-        "field": "nome_area" 
-      },
-      "aggs": {
-        "vaccines_per_region": {
-          "sum": {
-            "field": "total_vaccinations"
-          }
-        }
-      }
-    }
-  }
-}
-
-
-11 -- Total number of vaccinations for each vaccine type
-
-POST vaccines_administrations/_search
-{
-  "size": 0,
-  "aggs": {
-    "vaccines": {
-      "terms": { 
-        "field": "fornitore" 
-      },
-      "aggs": {
-        "vaccines_per_type": {
-          "sum": {
-            "field": "total_vaccinations"
-          }
-        }
-      }
-    }
-  }
-}
-
-
-12 -- Number of vaccinations for age group & type of vaccine
-
-POST vaccines_administrations/_search
+GET /index-vaccines_administrations/_search
 {
   "size": 0,
   "track_total_hits": true,
@@ -293,13 +251,13 @@ POST vaccines_administrations/_search
         "sources": [{
           "fascia_anagrafica": {
             "terms": { 
-              "field": "fascia_anagrafica"
+              "field": "age_range"
             }
           }
         }, {
           "fornitore": {
             "terms": { 
-              "field": "fornitore"
+              "field": "supplier"
             }
           }
         }], 
@@ -308,7 +266,7 @@ POST vaccines_administrations/_search
       "aggs": {
         "total_vaccines": {
           "sum": {
-            "field": "total_vaccinations"
+            "field": "total_doses"
           }
         }
       }
@@ -317,20 +275,20 @@ POST vaccines_administrations/_search
 }
 
 
-13 -- Number of booster doses for age group
+10 -- Number of booster doses for age group
 
-POST vaccines_administrations/_search
+GET /index-vaccines_administrations/_search
 {
   "size": 0,
   "aggs": {
     "age_groups": {
       "terms": { 
-        "field": "fascia_anagrafica" 
+        "field": "age_range" 
       },
       "aggs": {
         "boosters_per_group": {
           "sum": {
-            "field": "dose_addizionale_booster"
+            "field": "booster_dose"
           }
         }
       }
@@ -339,20 +297,20 @@ POST vaccines_administrations/_search
 }
 
 
-14 -- Top 10 dates with most vaccinations
+11 -- Top 10 dates with most vaccinations
 
-POST vaccines_administrations/_search
+GET index-vaccines_administrations/_search
 {
   "size": 0,
   "aggs": {
     "dates": {
       "terms": { 
-        "field": "data_somministrazione" 
+        "field": "administration_date" 
       },
       "aggs": {
         "sum_vaccinations": {
           "sum": {
-            "field": "total_vaccinations"
+            "field": "total_doses"
           }
         },
         "dates_sort": {
