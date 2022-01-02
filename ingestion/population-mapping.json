@@ -3,11 +3,11 @@
     "area": {
       "type": "keyword"
     },
-    "age_range": {
-      "type": "keyword"
-    },
     "area_name": {
       "type": "text"
+    },
+    "age_range": {
+      "type": "keyword"
     },
     "total_population": {
       "type": "long"

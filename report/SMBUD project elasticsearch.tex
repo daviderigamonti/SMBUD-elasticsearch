@@ -102,7 +102,11 @@ vaccine brand, the top regions for vaccine administration etc.
 
 \subsection{Hypoteses}
 
-\blindtext
+\begin{itemize}
+    \item[] We assumed that the general user doesn't know the italian language, therefore
+        all the fields' names contained in the dataset were renamed to an appropriate 
+        english translation 
+\end{itemize}
   
 \clearpage
 
@@ -110,6 +114,104 @@ vaccine brand, the top regions for vaccine administration etc.
 \section{Data }
 
 \subsection{Schema description}
+
+\todo{add field descriptions}
+\begin{itemize}
+    \item Schema for \textbf{vaccines administrations} 
+        (somministrazioni-vaccini-latest.csv):
+        \begin{itemize}
+            \item administration\_date (data\_somministrazione): \emph{date [iso8601]} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item supplier (fornitore): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item male\_gender (sesso\_maschile): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item female\_gender (sesso\_femminile): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item first\_dose (prima\_dose): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item second\_dose (seconda\_dose): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item previous\_infection (pregressa\_infezione): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item booster\_dose (dose\_addizionale\_booster): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item total\_doses: \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item NUTS1\_code (codice\_NUTS1): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item NUTS2\_code (codice\_NUTS2): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item area\_name (nome\_area): \emph{text} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+        \end{itemize}
+    \item Schema for \textbf{population} (platea.csv):
+        \begin{itemize}
+            \item area (area): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item area\_name (nome\_area): \emph{text} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+            \item total\_population (totale\_popolazione): \emph{long} \\
+                \begin{footnotesize}
+                    ---
+                \end{footnotesize}
+        \end{itemize}
+    \item Schema for \textbf{healed} (soggetti-guariti.csv):
+    \begin{itemize}
+        \item area (area): \emph{keyword} \\
+            \begin{footnotesize}
+                ---
+            \end{footnotesize}
+        \item area\_name (nome\_area): \emph{text} \\
+            \begin{footnotesize}
+                ---
+            \end{footnotesize}
+        \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+            \begin{footnotesize}
+                ---
+            \end{footnotesize}
+        \item total\_healed (totale\_healed): \emph{long} \\
+            \begin{footnotesize}
+                ---
+            \end{footnotesize}
+    \end{itemize}
+\end{itemize}
 
 \blindtext
 
