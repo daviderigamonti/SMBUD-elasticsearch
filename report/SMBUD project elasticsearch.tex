@@ -237,7 +237,8 @@ found in ‘soggetti-guariti.csv’ present in the same repository.
 
 %QUERIES
 \subsection{Queries} \todo{manca la descrizione}
-\subsubsection{Number of daily vaccines for each dose (1st, 2nd or booster)}
+
+\subsubsection{Number of daily vaccines for each dose}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -273,7 +274,10 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of vaccines by gender in each region}
+\noindent
+\blindtext
+
+\subsubsection{Number of doses per gender in each region}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -305,7 +309,10 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of vaccines in each region (divided in 1,2, booster and total vaccinations)}
+\noindent
+\blindtext
+
+\subsubsection{Number of doses per number in each region}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -347,6 +354,9 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
+\noindent
+\blindtext
+
 \subsubsection{Number of doses for each vaccine supplier}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
@@ -371,7 +381,10 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of doses divided by NUTS1}
+\noindent
+\blindtext
+
+\subsubsection{Number of doses for each NUTS1 zone}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -393,6 +406,9 @@ GET /index-vaccines_administrations/_search
 }
     \end{verbatim}
 \end{tcolorbox}
+
+\noindent
+\blindtext
 
 \subsubsection{Number of people with previous infection by region}
 
@@ -419,7 +435,10 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of vaccines by age range}
+\noindent
+\blindtext
+
+\subsubsection{Number of doses for each age group}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -442,6 +461,19 @@ GET /index-vaccines_administrations/_search
 
     \end{verbatim}
 \end{tcolorbox}
+
+\noindent
+\blindtext
+
+\subsubsubsection{Grouping by age range and region}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+    \end{verbatim}
+\end{tcolorbox}
+
+\noindent
+\blindtext
 
 \subsubsection{Number of average doses per region}
 
@@ -466,7 +498,10 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of vaccinations for age group and vaccine supplier}
+\noindent
+\blindtext
+
+\subsubsection{Number of doses for age group and vaccine supplier}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
@@ -505,6 +540,9 @@ GET /index-vaccines_administrations/_search
     \end{verbatim}
 \end{tcolorbox}
 
+\noindent
+\blindtext
+
 \subsubsection{Number of booster doses for age group}
 
 \begin{tcolorbox}[fontupper=\scriptsize]
@@ -529,6 +567,9 @@ GET /index-vaccines_administrations/_search
 }
     \end{verbatim}
 \end{tcolorbox}
+
+\noindent
+\blindtext
 
 \subsubsection{Top 10 dates with most vaccinations}
 
@@ -560,115 +601,6 @@ GET index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
-\end{tcolorbox}
-
-\todo{add queries}
-
-\subsubsection{Number of daily vaccines for each dose}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses per gender in each region}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses in each region}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses for each brand}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses for each NUTS1 zone}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses for each age group}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsubsection{Grouping by age range and region}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of average doses per region}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of doses for age group and brand}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Number of booster doses for age group}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
-    \end{verbatim}
-\end{tcolorbox}
-
-\noindent
-\blindtext
-
-\subsubsection{Top 10 dates with most vaccinations}
-
-\begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
     \end{verbatim}
 \end{tcolorbox}
 
