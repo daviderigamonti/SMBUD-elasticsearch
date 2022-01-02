@@ -228,9 +228,333 @@ We also used information about the number of healed people in each region that c
 found in ‘soggetti-guariti.csv’ present in the same repository.
 
 %QUERIES
-\subsection{Queries}
+\subsection{Queries} \todo{manca la descrizione}
+\subsubsection{Number of daily vaccines for each dose (1st, 2nd or booster)}
 
-\blindtext
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "administration_date"
+      },
+      "aggs": {
+        "totalFirstDoses": {
+          "sum": {
+            "field": "first_dose"
+          }
+        },        
+        "totalSecondDoses": {
+          "sum": {
+            "field": "second_dose"
+          }
+        },        
+        "totalBoosters": {
+          "sum": {
+            "field": "booster_dose"
+          }
+        }
+      }
+    }
+  } 
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of vaccines by gender in each region}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "area",
+        "size": 21
+      },
+      "aggs": {
+        "totalWomenDoses": {
+          "sum": {
+            "field": "female_gender"
+          }
+        },        
+        "totalMenDoses": {
+          "sum": {
+            "field": "male_gender"
+          }
+        }
+      }
+    }
+  } 
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of vaccines in each region (divided in 1,2, booster and total vaccinations)}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+"size": 0, 
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "area",
+        "size": 21
+      },
+      "aggs": {
+        "totalFirstDoses": {
+          "sum": {
+            "field": "first_dose"
+          }
+        },        
+        "totalSecondDoses": {
+          "sum": {
+            "field": "second_dose"
+          }
+        },        
+        "totalBoosters": {
+          "sum": {
+            "field": "booster_dose"
+          }
+        },        
+        "totalDoses": {
+          "sum": {
+            "field": "total_doses"
+          }
+        }
+      }
+    }
+  } 
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of doses for each vaccine supplier}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{"size":0,
+  "aggs": {
+    "supplier": {
+      "terms": {
+        "field": "supplier"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : {
+          "field": "total_doses"
+          }
+        }
+      }
+    }
+  }
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of doses divided by NUTS1}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{"size":0,
+  "aggs": {
+    "by_NUTS1": {
+      "terms": {
+        "field": "NUTS1_code"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : {
+          "field": "total_doses"
+          }
+        }
+      }
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of people with previous infection by region}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+  "size":0,
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "area"
+      },
+      "aggs": {
+        "People with previous infection": {
+          "sum": {
+            "field": "previous_infection"
+          }
+        }
+      }
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of vaccines by age range}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{"size":0,
+  "aggs": {
+    "by_age": {
+      "terms": {
+        "field": "age_range"
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { 
+          "field": "total_doses"
+          }
+        }
+      }
+    }
+  }
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of average doses per region}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{"size":0,
+  "aggs": {
+    "Region": {
+      "terms": {
+        "field": "area"
+      },
+      "aggs": {
+        "avg_doses" : { "avg": {
+          "field": "total_doses"
+        } } 
+      }
+    }
+  }
+}
+
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of vaccinations for age group and vaccine supplier}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+  "size": 0,
+  "track_total_hits": true,
+  "aggs": {
+    "age_groups_types": {
+      "composite": {
+        "sources": [{
+          "fascia_anagrafica": {
+            "terms": { 
+              "field": "age_range"
+            }
+          }
+        }, {
+          "supplier": {
+            "terms": { 
+              "field": "supplier"
+            }
+          }
+        }], 
+        "size": 10000
+      },
+      "aggs": {
+        "total_vaccines": {
+          "sum": {
+            "field": "total_doses"
+          }
+        }
+      }
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Number of booster doses for age group}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+  "size": 0,
+  "aggs": {
+    "age_groups": {
+      "terms": { 
+        "field": "age_range" 
+      },
+      "aggs": {
+        "boosters_per_group": {
+          "sum": {
+            "field": "booster_dose"
+          }
+        }
+      }
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Top 10 dates with most vaccinations}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET index-vaccines_administrations/_search
+{
+  "size": 0,
+  "aggs": {
+    "dates": {
+      "terms": { 
+        "field": "administration_date" 
+      },
+      "aggs": {
+        "sum_vaccinations": {
+          "sum": {
+            "field": "total_doses"
+          }
+        },
+        "dates_sort": {
+          "bucket_sort": {
+            "sort": [
+              { "sum_vaccinations": { "order" : "desc" } }
+            ],
+            "size": 10
+          }
+        }
+      }
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+
 
 \subsection{Commands}
 
