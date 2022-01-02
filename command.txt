@@ -1,0 +1,17 @@
+PUT /index-vaccines_administrations/_doc/ id???
+ {    
+   "administration_date": "",
+    "supplier": "",
+    "area": "",
+    "age_range" : "",
+    "male_gender": "",
+    "female_gender": "",
+    "first_dose": "",
+    "second_dose": "",
+    "previous_infection": "",
+    "booster_dose": "",
+    "NUTS1_code": "",
+    "NUTS2_code": "",
+    "ISTAT_region_code": "",
+    "area_name": "" 
+}
