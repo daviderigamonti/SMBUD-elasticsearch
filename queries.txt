@@ -1,5 +1,5 @@
 1 - number of daily vaccines for each dose (1,2 or booster)
-2 - number of vaccines per genre in each region
+2 - number of vaccines per gender in each region
 3 - number of vaccines in each region (divided in 1,2, booster and total vaccinations)
 4 - number of doses for each vax brand
 5 - number of doses per NUTS1 (NE,NO,C,S,isole)
