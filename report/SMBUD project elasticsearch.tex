@@ -134,95 +134,108 @@ vaccine brand, the top regions for vaccine administration etc.
     \item Schema for \textbf{vaccines administrations} 
         (somministrazioni-vaccini-latest.csv):
         \begin{itemize}
+            \item @timestamp: \emph{date} \\
+            \begin{footnotesize}
+                elasticsearch timestamp
+            \end{footnotesize}
             \item administration\_date (data\_somministrazione): \emph{date [iso8601]} \\
                 \begin{footnotesize}
-                    ---
+                    date of all the doses' administration
                 \end{footnotesize}
             \item supplier (fornitore): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    brand of the administrated vaccine, mapped as keyword for easier aggregations
+                \end{footnotesize}
+            \item area (area): \emph{keyword} \\
+                \begin{footnotesize}
+                    abbreviation of the region where the administration happened
+                \end{footnotesize}
+            \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+                \begin{footnotesize}
+                    age range of the all the subjects given the vaccine, mapped as keyword for queries and aggregations
                 \end{footnotesize}
             \item male\_gender (sesso\_maschile): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of male individuals given the vaccine by day and region
                 \end{footnotesize}
             \item female\_gender (sesso\_femminile): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of female individuals given the vaccine by day and region
                 \end{footnotesize}
             \item first\_dose (prima\_dose): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of first doses
                 \end{footnotesize}
             \item second\_dose (seconda\_dose): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of second doses
                 \end{footnotesize}
             \item previous\_infection (pregressa\_infezione): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of administrations to subjects with a previous covid-19 infection within 3 and 6 months before the {\it administration date}, therefore needing only one dose 
                 \end{footnotesize}
             \item booster\_dose (dose\_addizionale\_booster): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of booster doses
                 \end{footnotesize}
             \item total\_doses: \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total number of doses
                 \end{footnotesize}
             \item NUTS1\_code (codice\_NUTS1): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    European classifications for territorial units. Level: NUTS 1. Mapped as keyword for queries and aggregations
                 \end{footnotesize}
             \item NUTS2\_code (codice\_NUTS2): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    European classifications for territorial units. Level: NUTS 2. Mapped as keyword for queries and aggregations
                 \end{footnotesize}
             \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    ISTAT code of the region
                 \end{footnotesize}
             \item area\_name (nome\_area): \emph{text} \\
                 \begin{footnotesize}
-                    ---
+                    name of the region mapped as text for queries with the analyzer
                 \end{footnotesize}
         \end{itemize}
     \item Schema for \textbf{population} (platea.csv):
         \begin{itemize}
             \item area (area): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    abbreviation of the region/autonomous province
                 \end{footnotesize}
             \item area\_name (nome\_area): \emph{text} \\
                 \begin{footnotesize}
-                    ---
+                    standard name of the area (bilingual name where necessary)
                 \end{footnotesize}
             \item age\_range (fascia\_anagrafica): \emph{keyword} \\
                 \begin{footnotesize}
-                    ---
+                    age range of vaccinable subjects
                 \end{footnotesize}
             \item total\_population (totale\_popolazione): \emph{long} \\
                 \begin{footnotesize}
-                    ---
+                    total population for a given age range
                 \end{footnotesize}
         \end{itemize}
     \item Schema for \textbf{healed} (soggetti-guariti.csv):
     \begin{itemize}
         \item area (area): \emph{keyword} \\
             \begin{footnotesize}
-                ---
+                abbreviation of the region/autonomous province
             \end{footnotesize}
         \item area\_name (nome\_area): \emph{text} \\
             \begin{footnotesize}
-                ---
+                standard name of the area (bilingual name where necessary)
             \end{footnotesize}
         \item age\_range (fascia\_anagrafica): \emph{keyword} \\
             \begin{footnotesize}
-                ---
+                age range of healed subjects
             \end{footnotesize}
         \item total\_healed (totale\_healed): \emph{long} \\
             \begin{footnotesize}
-                ---
+                total number of subjects healed up to 6 months ago, for a given age range
+                 
             \end{footnotesize}
     \end{itemize}
 \end{itemize}
