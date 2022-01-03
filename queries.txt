@@ -21,7 +21,8 @@ GET /index-vaccines_administrations/_search
   "aggs": {
     "Administration date": {
       "terms": {
-        "field": "administration_date"
+        "field": "administration_date",
+        "size": 370
       },
       "aggs": {
         "totalFirstDoses": {
