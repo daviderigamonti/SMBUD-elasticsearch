@@ -236,19 +236,20 @@ We also used information about the number of healed people in each region that c
 found in ‘soggetti-guariti.csv’ present in the same repository.
 
 %QUERIES
-\subsection{Queries} \todo{manca la descrizione}
+\subsection{Queries}
 
 \subsubsection{Number of daily vaccines for each dose}
-
+Total number of first, second and booster doses administred in each date.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
 "size": 0, 
   "aggs": {
-    "Region": {
+    "Administration Date": {
       "terms": {
-        "field": "administration_date"
+        "field": "administration_date",
+        "size": 370
       },
       "aggs": {
         "totalFirstDoses": {
@@ -278,7 +279,7 @@ GET /index-vaccines_administrations/_search
 \blindtext
 
 \subsubsection{Number of doses per gender in each region}
-
+Total doses administred to men and women in each region. 
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -312,8 +313,8 @@ GET /index-vaccines_administrations/_search
 \noindent
 \blindtext
 
-\subsubsection{Number of doses per number in each region}
-
+\subsubsection{Number of vaccines per dose number in each region}
+Total number of first, second, booster and total doses administred in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -358,7 +359,7 @@ GET /index-vaccines_administrations/_search
 \blindtext
 
 \subsubsection{Number of doses for each vaccine supplier}
-
+Total doses for each vaccine supplier (Pfizer/BioNTech, Moderna, Vaxzevria (AstraZeneca), Janssen, Pfizer Pediatrico).
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -385,7 +386,7 @@ GET /index-vaccines_administrations/_search
 \blindtext
 
 \subsubsection{Number of doses for each NUTS1 zone}
-
+Total number of doses administred in each NUTS1 zone (ITC= NorthWest, ITH = NorthEast, ITI = Center, ITF = South, ITG = Isles)
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search

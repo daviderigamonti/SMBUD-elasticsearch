@@ -19,7 +19,7 @@ GET /index-vaccines_administrations/_search
 {
 "size": 0, 
   "aggs": {
-    "Region": {
+    "Administration date": {
       "terms": {
         "field": "administration_date"
       },
