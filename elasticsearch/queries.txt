@@ -10,6 +10,7 @@
 9 - Number of vaccinations for age group & type of vaccine
 10 - Number of booster doses for age group
 11 - Top 10 dates with most vaccinations
+12 - Get vaccine information for a given region
 
 
 
@@ -323,3 +324,14 @@ GET index-vaccines_administrations/_search
     }
   }
 }
+
+12 -- Get vaccine information for a given region
+GET /index-vaccines_administrations/_search
+{
+  "query": {
+    "match": {
+          "area_name": "Val d'aosta"
+    }
+  }
+}
+

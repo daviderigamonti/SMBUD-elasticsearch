@@ -1,17 +1,33 @@
-PUT /index-vaccines_administrations/_doc/ id???
+1 - Insert new data about vaccinations
+2 - Delete all document inserted in the specified date
+
+1 -- Insert new data about vaccinations
+POST /index-vaccines_administrations/_doc/
  {    
-   "administration_date": "",
-    "supplier": "",
-    "area": "",
-    "age_range" : "",
-    "male_gender": "",
-    "female_gender": "",
-    "first_dose": "",
-    "second_dose": "",
-    "previous_infection": "",
-    "booster_dose": "",
-    "NUTS1_code": "",
-    "NUTS2_code": "",
-    "ISTAT_region_code": "",
-    "area_name": "" 
+    "area" : "FVG",
+    "area_name" : "Friuli-Venezia Giulia",
+    "second_dose" : 0,
+    "previous_infection" : 1,
+    "administration_date" : "2022-01-03",
+    "NUTS1_code" : "ITH",
+    "ISTAT_region_code" : 6,
+    "male_gender" : 3,
+    "first_dose" : 2,
+    "age_range" : "30-39",
+    "supplier" : "Moderna",
+    "total_doses" : 3,
+    "booster_dose" : 0,
+    "NUTS2_code" : "ITH4",
+    "female_gender" : 0,
+    "total_doses" : 3
+}
+
+2 -- Delete all documents inserted in the specified date
+POST /index-vaccines_administrations/_delete_by_query
+{
+  "query": {
+    "match": {
+      "administration_date": "2022-01-03"
+    }
+  }
 }

@@ -134,23 +134,11 @@ vaccine brand, the top regions for vaccine administration etc.
     \item Schema for \textbf{vaccines administrations} 
         (somministrazioni-vaccini-latest.csv):
         \begin{itemize}
-            \item @timestamp: \emph{date} \\
-            \begin{footnotesize}
-                ---
-            \end{footnotesize}
             \item administration\_date (data\_somministrazione): \emph{date [iso8601]} \\
                 \begin{footnotesize}
                     ---
                 \end{footnotesize}
             \item supplier (fornitore): \emph{keyword} \\
-                \begin{footnotesize}
-                    ---
-                \end{footnotesize}
-            \item area (area): \emph{keyword} \\
-                \begin{footnotesize}
-                    ---
-                \end{footnotesize}
-            \item age\_range (fascia\_anagrafica): \emph{keyword} \\
                 \begin{footnotesize}
                     ---
                 \end{footnotesize}
@@ -292,7 +280,6 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of doses per gender in each region}
 Total doses administred to men and women in each region. 
@@ -327,7 +314,6 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of vaccines per dose number in each region}
 Total number of first, second, booster and total doses administred in each region.
@@ -372,7 +358,6 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of doses for each vaccine supplier}
 Total doses for each vaccine supplier (Pfizer/BioNTech, Moderna, Vaxzevria (AstraZeneca), Janssen, Pfizer Pediatrico).
@@ -399,7 +384,6 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of doses for each NUTS1 zone}
 Total number of doses administred in each NUTS1 zone (ITC= NorthWest, ITH = NorthEast, ITI = Center, ITF = South, ITG = Isles)
@@ -425,10 +409,9 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of people with previous infection by region}
-
+Total number of people who was infected by Covid-19 before the vaccination in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -453,10 +436,10 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of doses for each age group}
-
+Total number of doses administred to each age range ('05-11', '12-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89',
+       '90+').
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -480,20 +463,40 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsubsection{Grouping by age range and region}
-
+Total number of doses administred to each age range in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{"size":0,
+  "aggs": {
+    "genres_and_products": {
+      "multi_terms": {
+        "terms": [{
+          "field": "age_range" 
+        }, {
+          "field": "area"
+        }], 
+        "size": 1000
+      },
+      "aggs": {
+        "total_doses" : { "sum" : { 
+          "field": "total_doses"
+          } 
+        }
+      }
+    }
+  }
+}
+
     \end{verbatim}
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of average doses per region}
-
+Average umber of administred doses in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -516,10 +519,9 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Number of doses for age group and vaccine supplier}
-
+Total number of doses divided by age group and vaccine supplier.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -558,10 +560,9 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
-\subsubsection{Number of booster doses for age group}
-
+\subsubsection{Number of booster doses for age range}
+Total number of booster doses for each age range.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -586,10 +587,9 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Top 10 dates with most vaccinations}
-
+Top 10 dates having the highest number of administred doses.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
 GET index-vaccines_administrations/_search
@@ -622,31 +622,69 @@ GET index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \noindent
-\blindtext
+
+\subsubsection{Search by region name}
+Returns information about vaccines in the specified region.
+\begin{tcolorbox}[fontupper=\scriptsize]
+    \begin{verbatim}
+GET /index-vaccines_administrations/_search
+{
+  "query": {
+    "match": {
+          "area_name": "Val d'aosta"
+    }
+  }
+}
+    \end{verbatim}
+\end{tcolorbox}
+\noindent
 
 \subsection{Commands}
 
-\todo{add commands}
-
 \subsubsection{Add entries for a given day}
-
+Add a new document in the dataset.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
+POST /index-vaccines_administrations/_doc/
+ {    
+    "area" : "FVG",
+    "area_name" : "Friuli-Venezia Giulia",
+    "second_dose" : 0,
+    "previous_infection" : 1,
+    "administration_date" : "2022-01-03",
+    "NUTS1_code" : "ITH",
+    "ISTAT_region_code" : 6,
+    "male_gender" : 3,
+    "first_dose" : 2,
+    "age_range" : "30-39",
+    "supplier" : "Moderna",
+    "total_doses" : 3,
+    "booster_dose" : 0,
+    "NUTS2_code" : "ITH4",
+    "female_gender" : 0,
+    "total_doses" : 3
+}
     \end{verbatim}
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \subsubsection{Remove entries from a given day}
-
+Remove all documents in the specified date.
 \begin{tcolorbox}[fontupper=\scriptsize]
     \begin{verbatim}
+POST /index-vaccines_administrations/_delete_by_query
+{
+  "query": {
+    "match": {
+      "administration_date": "2022-01-03"
+    }
+  }
+}
     \end{verbatim}
 \end{tcolorbox}
 
 \noindent
-\blindtext
 
 \clearpage
 
