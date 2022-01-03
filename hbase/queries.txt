@@ -1,0 +1,107 @@
+-- Number of daily vaccines for each dose
+
+SELECT CONVERT_FROM(vaccines_administrations._date.administration_date, 'UTF8') AS date_time,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)) AS number_of_daily_vaccines_first_dose,
+       SUM(CAST(vaccines_administrations.doses.second_dose AS INT)) AS number_of_daily_vaccines_second_dose,
+       SUM(CAST(vaccines_administrations.doses.booster_dose AS INT)) AS number_of_daily_vaccines_booster_dose
+FROM vaccines_administrations
+GROUP BY date_time
+
+
+-- Number of doses per gender in each region
+
+SELECT CONVERT_FROM(vaccines_administrations.region.area, 'UTF8') AS area_region,
+       SUM(CAST(vaccines_administrations.stats.male_gender AS INT)) AS totalMenDoses,
+       SUM(CAST(vaccines_administrations.stats.female_gender AS INT)) AS totalWomenDoses
+FROM vaccines_administrations
+GROUP BY area_region;
+
+
+-- Number of doses for each vaccine supplier
+
+SELECT CONVERT_FROM(vaccines_administrations._type.supplier, 'UTF8') AS supplier,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+GROUP BY supplier
+
+
+-- Number of doses for each NUTS1 zone
+
+SELECT CONVERT_FROM(vaccines_administrations.nuts.NUTS1_code, 'UTF8') AS by_NUTS1,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+GROUP BY by_NUTS1
+
+
+-- Number of people with previous infection by region
+
+SELECT CONVERT_FROM(vaccines_administrations.region.area, 'UTF8') AS area_region,
+       SUM(CAST(vaccines_administrations.doses.previous_infection AS INT)) AS people_previous_infection
+FROM vaccines_administrations
+GROUP BY area_region;
+
+
+-- Number of doses for each age group
+
+SELECT CONVERT_FROM(vaccines_administrations.stats.age_range, 'UTF8') AS age_range,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+GROUP BY age_range
+
+
+-- Grouping by age range and region
+
+SELECT CONVERT_FROM(vaccines_administrations.stats.age_range, 'UTF8') AS age_range,
+       CONVERT_FROM(vaccines_administrations.region.area, 'UTF8') AS area_region,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+GROUP BY age_range, area_region
+
+
+-- Number of average doses per region
+
+SELECT CONVERT_FROM(vaccines_administrations.region.area, 'UTF8') AS area_region,
+       AVG(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+GROUP BY area_region
+
+
+-- Number of doses for age group and vaccine supplier relative to Lombardia
+
+SELECT CONVERT_FROM(vaccines_administrations.stats.age_range, 'UTF8') AS age_range,
+       CONVERT_FROM(vaccines_administrations._type.supplier, 'UTF8') AS supplier,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_doses
+FROM vaccines_administrations
+WHERE vaccines_administrations.region.area LIKE 'LOM'
+GROUP BY supplier, age_range
+
+
+-- Top 10 dates with most vaccinations
+
+SELECT CONVERT_FROM(vaccines_administrations._date.administration_date, 'UTF8') AS administration_date,
+       SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+           CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+           CAST(vaccines_administrations.doses.booster_dose AS INT) +
+           CAST(vaccines_administrations.doses.previous_infection AS INT)) AS total_vaccinations
+FROM vaccines_administrations
+GROUP BY administration_date
+ORDER BY total_vaccinations ASC
+LIMIT 10;

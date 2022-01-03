@@ -97,6 +97,10 @@
 
 \clearpage
 
+% Paragraph skip
+\setlength{\parskip}{\baselineskip}%
+\setlength{\parindent}{0pt}%
+
 % INTRODUCTION
 \section{Introduction}
 
@@ -644,19 +648,167 @@ GET index-vaccines_administrations/_search
 \clearpage
 
 %OPTIONAL POINT N°2
-\section{Other features in ---} \todo{NOSQL Platform}
+\section{Other features in HBase} 
 
-\blindtext
+We deciced to use \emph{HBase} as an alternative NoSQL DBMS in order to implement some 
+additional features. \\
+\emph{HBase} is a column-oriented DBMS usually utilized in the context of the 
+\emph{Apache Hadoop} framework, it can be run locally using \emph{Apache Zookeeper} or 
+by installing \emph{Hadoop} and running \emph{HBase} on top of \emph{HDFS}.
+
+\subsection{Input Data Preparation}
+
+In order to import data into \emph{HBase}, the first step is to eliminate the labels 
+from the csv file containing raw data. \\
+In our case the file has been renamed as \emph{vaccines\_administrations\_latest.csv} 
+and a \\ unique ID generated using \emph{Python}'s \texttt{uuid.uuid4()} function 
+(from the \texttt{uuid} library) has been added as the first item for each row since
+HBase expects a row key in that particular position. \\ 
+The unique ID was generate in this way since an incremental sequential number as a 
+row key is not recommended according to the \emph{HBase} documentation. 
+
+\noindent
+Once we have the data in CSV format, we have to store it in a path from where 
+\emph{HBase} can access it. \\
+If we want to load the file using Hadoop, we will have to copy the file to the 
+\emph{HDFS} location, this can be done using the command:
+\begin{footnotesize}
+  \begin{itemize}
+    \item[] \texttt{hadoop fs -copyFromLocal <LOCAL\_PATH>  <HDFS\_PATH>} 
+  \end{itemize}
+\end{footnotesize}
+
+\subsection{Storing data into HBase}
+
+\begin{footnotesize}
+  \begin{itemize}
+    \item[] \texttt{create 'vaccines\_administrations', \{NAME => '\_date'\}, \\
+      \{NAME => '\_type'\}, \{NAME => 'region'\}, \\
+      \{NAME => 'stats'\}, \{NAME => 'doses'\}, \{NAME => 'nuts'\}} 
+  \end{itemize}
+\end{footnotesize}
+This command will create an \emph{HBase} table in order to store the data. \\
+Notice that we are creating five column families for some of the columns of the CSV file,
+this is done for accessing and querying the data in a more easier and flexible way using
+\emph{Apache Drill}. 
+
+\noindent
+
+\begin{footnotesize}
+  \begin{itemize}
+    \item[] \texttt{./hbase org.apache.hadoop.hbase.mapreduce.ImportTsv \\
+      -Dimporttsv.separator=',' \\
+      -Dimporttsv.columns=HBASE\_ROW\_KEY,\_date:administration\_date, \\
+        \_type:supplier,region:area,stats:age\_range,stats:male\_gender, \\
+        stats:female\_gender,doses:first\_dose,doses:second\_dose, \\
+        doses:previous\_infection,doses:booster\_dose,nuts:NUTS1\_code, \\
+        nuts:NUTS2\_code,region:ISTAT\_region\_code,region:area\_name \\
+      vaccines\_administrations \\
+      <PATH>} 
+  \end{itemize}
+\end{footnotesize}
+Once we submit this command a \emph{MapReduce} that will import the CSV file into the 
+HBase table that we created will start. \\
+Each column of the CSV file is mapped into the respective column family.  \\
+\texttt{<PATH>} needs be changed to the HDFS path if we are using \emph{Hadoop} or to 
+the local path of the CSV file if we are using \emph{Zookeeper}. 
+
+\subsection{Querying HBase}
+
+For querying \emph{HBase} we decided to use \emph{Apache Drill}, this means that our
+queries will be written in SQL and can benefit from all the extensions that the 
+framework provides. \\
+To be able to query an \emph{HBase} database, after running \emph{Apache Drill} in 
+embedded mode, we will have to go to the storage section and enable \emph{HBase}.  
+
+\noindent
+The translation of some Elasticsearch queries with sample screenshots of possible results
+will be provided here, a more complete selection of queries will be provided separately.
+
+\subsubsection{Number of daily vaccines for each dose}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+SELECT CONVERT_FROM(vaccines_administrations._date.administration_date, 'UTF8') 
+        AS date_time,
+  SUM(CAST(vaccines_administrations.doses.first_dose AS INT)) 
+          AS number_of_daily_vaccines_first_dose,
+  SUM(CAST(vaccines_administrations.doses.second_dose AS INT)) 
+          AS number_of_daily_vaccines_second_dose,
+  SUM(CAST(vaccines_administrations.doses.booster_dose AS INT)) 
+          AS number_of_daily_vaccines_booster_dose
+FROM vaccines_administrations
+GROUP BY date_time
+  \end{verbatim}
+\end{tcolorbox}
+
+\noindent
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.6\linewidth]{polimi.png}
+  \caption*{Possible result:.} % Caption
+\end{figure}
+
+\subsubsection{Number of doses for each vaccine supplier}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+SELECT CONVERT_FROM(vaccines_administrations._type.supplier, 'UTF8') 
+        AS supplier,
+  SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+      CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+      CAST(vaccines_administrations.doses.booster_dose AS INT) +
+      CAST(vaccines_administrations.doses.previous_infection AS INT)) 
+          AS total_doses
+FROM vaccines_administrations
+GROUP BY supplier
+  \end{verbatim}
+\end{tcolorbox}
+
+\noindent
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.6\linewidth]{polimi.png}
+  \caption*{Possible result:.} % Caption
+\end{figure}
+
+\subsubsection{Top 10 dates with most vaccinations}
+
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+SELECT CONVERT_FROM(vaccines_administrations._date.administration_date, 'UTF8') 
+        AS administration_date,
+  SUM(CAST(vaccines_administrations.doses.first_dose AS INT)   + 
+      CAST(vaccines_administrations.doses.second_dose AS INT)  + 
+      CAST(vaccines_administrations.doses.booster_dose AS INT) +
+      CAST(vaccines_administrations.doses.previous_infection AS INT)) 
+          AS total_vaccinations
+FROM vaccines_administrations
+GROUP BY administration_date
+ORDER BY total_vaccinations ASC
+LIMIT 10;
+  \end{verbatim}
+\end{tcolorbox}
+
+\noindent
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.6\linewidth]{polimi.png}
+  \caption*{Possible result:.} % Caption
+\end{figure}
 
 \clearpage
 
 % REFERENCES AND SOURCES
 \section{References and sources}
 
-In order to develop these project, the following tools were used:
+In order to develop this project, the following tools were used:
 
 \begin{itemize}
     \item Elasticsearch and Kibana in order to store, query and visualize data;
+    \item HBase, HDFS, Hadoop, Apache Drill and Zookeeper as an alternative NoSQL 
+      framework for some features;
+    \item Python as a mean to easily modify and prepare files for import;
     \item \LaTeX~to write the report;
     \item Github as a versioning and collaboration mean;
     \item \url{https://github.com/italia/covid19-opendata-vaccini} \\
