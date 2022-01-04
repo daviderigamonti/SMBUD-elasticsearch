@@ -30,12 +30,7 @@
 }
 
 % Add subsubsubsection
-\makeatletter
-\newcommand\subsubsubsection{\@startsection{paragraph}{4}{\z@} %
-                            {-2.5ex\@plus -1ex \@minus -.25ex} %
-                            {1.25ex \@plus .25ex} %
-                            {\normalfont\normalsize\bfseries}}
-\makeatother
+
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
@@ -49,36 +44,35 @@
 
 % Title
 \begin{titlepage}
-    \centering
-    {\Huge\bfseries Pandemic Information System Model\par} % Project title
-    \vspace{1.5cm}
-    {\scshape\large Systems and Methods for Big and Unstructured Data \par} % Course
-    \vspace{0.5cm}
-    {\scshape\large Prof. Marco Brambilla \par} % Professor
-    \vspace{1cm}
-    {\scshape\large % Description
-        Third delivery \par 
-        Elasticsearch Project \par 
-    }
-    \vspace{0.5cm}
-    {\slshape\large January 2022 \par} % Date
-    \vspace{1cm}
-    \linespread{0.8} % Authors interline
-    {\large\itshape % Authors
-        Avci Oguzhan - \texttt{10557284}\\
-        Gentile Nicole - \texttt{10594355}\\
-        Rigamonti Davide - \texttt{10629791}\\
-        Singh Raul - \texttt{10623232}\\
-        Tagliaferri Mattia - \texttt{10572418}
-    }
-    \vfill
-    \begin{figure}[b]
-        \includegraphics[scale=0.6]{polimi.png} % Polimi logo
-        \centering
-    \end{figure}
+  \centering
+  {\Huge\bfseries Pandemic Information System Model\par} % Project title
+  \vspace{1.5cm}
+  {\scshape\large Systems and Methods for Big and Unstructured Data \par} % Course
+  \vspace{0.5cm}
+  {\scshape\large Prof. Marco Brambilla \par} % Professor
+  \vspace{1cm}
+  {\scshape\large % Description
+      Third delivery \par 
+      Elasticsearch Project \par 
+  }
+  \vspace{0.5cm}
+  {\slshape\large January 2022 \par} % Date
+  \vspace{1cm}
+  \linespread{0.8} % Authors interline
+  {\large\itshape % Authors
+      Avci Oguzhan - \texttt{10557284}\\
+      Gentile Nicole - \texttt{10594355}\\
+      Rigamonti Davide - \texttt{10629791}\\
+      Singh Raul - \texttt{10623232}\\
+      Tagliaferri Mattia - \texttt{10572418}
+  }
+  \vfill
+  \begin{figure}[b]
+      \includegraphics[scale=0.6]{polimi.png} % Polimi logo
+      \centering
+  \end{figure}
 
-    \pagenumbering{gobble} % Remove page number
-
+  \pagenumbering{gobble} % Remove page number
 \end{titlepage}
 
 \newgeometry{bottom=3cm} % Reset the margins
@@ -117,9 +111,9 @@ vaccine brand, the top regions for vaccine administration etc.
 \subsection{Hypoteses}
 
 \begin{itemize}
-    \item[] We assumed that the general user doesn't know the italian language, therefore
-        all the fields' names contained in the dataset were renamed to an appropriate 
-        english translation 
+  \item[] We assumed that the general user doesn't know the italian language, therefore
+    all the fields' names contained in the dataset were renamed to an appropriate 
+    english translation 
 \end{itemize}
   
 \clearpage
@@ -129,114 +123,143 @@ vaccine brand, the top regions for vaccine administration etc.
 
 \subsection{Schema description}
 
-\todo{add field descriptions}
 \begin{itemize}
-    \item Schema for \textbf{vaccines administrations} 
-        (somministrazioni-vaccini-latest.csv):
-        \begin{itemize}
-            \item @timestamp: \emph{date} \\
-            \begin{footnotesize}
-                elasticsearch timestamp
-            \end{footnotesize}
-            \item administration\_date (data\_somministrazione): \emph{date [iso8601]} \\
-                \begin{footnotesize}
-                    date of all the doses' administration
-                \end{footnotesize}
-            \item supplier (fornitore): \emph{keyword} \\
-                \begin{footnotesize}
-                    brand of the administrated vaccine, mapped as keyword for easier aggregations
-                \end{footnotesize}
-            \item area (area): \emph{keyword} \\
-                \begin{footnotesize}
-                    abbreviation of the region where the administration happened
-                \end{footnotesize}
-            \item age\_range (fascia\_anagrafica): \emph{keyword} \\
-                \begin{footnotesize}
-                    age range of the all the subjects given the vaccine, mapped as keyword for queries and aggregations
-                \end{footnotesize}
-            \item male\_gender (sesso\_maschile): \emph{long} \\
-                \begin{footnotesize}
-                    total number of male individuals given the vaccine by day and region
-                \end{footnotesize}
-            \item female\_gender (sesso\_femminile): \emph{long} \\
-                \begin{footnotesize}
-                    total number of female individuals given the vaccine by day and region
-                \end{footnotesize}
-            \item first\_dose (prima\_dose): \emph{long} \\
-                \begin{footnotesize}
-                    total number of first doses
-                \end{footnotesize}
-            \item second\_dose (seconda\_dose): \emph{long} \\
-                \begin{footnotesize}
-                    total number of second doses
-                \end{footnotesize}
-            \item previous\_infection (pregressa\_infezione): \emph{long} \\
-                \begin{footnotesize}
-                    total number of administrations to subjects with a previous covid-19 infection within 3 and 6 months before the {\it administration date}, therefore needing only one dose 
-                \end{footnotesize}
-            \item booster\_dose (dose\_addizionale\_booster): \emph{long} \\
-                \begin{footnotesize}
-                    total number of booster doses
-                \end{footnotesize}
-            \item total\_doses: \emph{long} \\
-                \begin{footnotesize}
-                    total number of doses
-                \end{footnotesize}
-            \item NUTS1\_code (codice\_NUTS1): \emph{keyword} \\
-                \begin{footnotesize}
-                    European classifications for territorial units. Level: NUTS 1. Mapped as keyword for queries and aggregations
-                \end{footnotesize}
-            \item NUTS2\_code (codice\_NUTS2): \emph{keyword} \\
-                \begin{footnotesize}
-                    European classifications for territorial units. Level: NUTS 2. Mapped as keyword for queries and aggregations
-                \end{footnotesize}
-            \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
-                \begin{footnotesize}
-                    ISTAT code of the region
-                \end{footnotesize}
-            \item area\_name (nome\_area): \emph{text} \\
-                \begin{footnotesize}
-                    name of the region mapped as text for queries with the analyzer
-                \end{footnotesize}
-        \end{itemize}
-    \item Schema for \textbf{population} (platea.csv):
-        \begin{itemize}
-            \item area (area): \emph{keyword} \\
-                \begin{footnotesize}
-                    abbreviation of the region/autonomous province
-                \end{footnotesize}
-            \item area\_name (nome\_area): \emph{text} \\
-                \begin{footnotesize}
-                    standard name of the area (bilingual name where necessary)
-                \end{footnotesize}
-            \item age\_range (fascia\_anagrafica): \emph{keyword} \\
-                \begin{footnotesize}
-                    age range of vaccinable subjects
-                \end{footnotesize}
-            \item total\_population (totale\_popolazione): \emph{long} \\
-                \begin{footnotesize}
-                    total population for a given age range
-                \end{footnotesize}
-        \end{itemize}
-    \item Schema for \textbf{healed} (soggetti-guariti.csv):
+  \item Schema for \textbf{vaccines administrations} 
+    (somministrazioni-vaccini-latest.csv):
     \begin{itemize}
-        \item area (area): \emph{keyword} \\
-            \begin{footnotesize}
-                abbreviation of the region/autonomous province
-            \end{footnotesize}
-        \item area\_name (nome\_area): \emph{text} \\
-            \begin{footnotesize}
-                standard name of the area (bilingual name where necessary)
-            \end{footnotesize}
-        \item age\_range (fascia\_anagrafica): \emph{keyword} \\
-            \begin{footnotesize}
-                age range of healed subjects
-            \end{footnotesize}
-        \item total\_healed (totale\_healed): \emph{long} \\
-            \begin{footnotesize}
-                total number of subjects healed up to 6 months ago, for a given age range
-                 
-            \end{footnotesize}
+      \item @timestamp: \emph{date} \\
+        \begin{footnotesize}
+          Timestamp assigned by elasticsearch.
+        \end{footnotesize}
+      \item administration\_date (data\_somministrazione): \emph{date [iso8601]} \\
+        \begin{footnotesize}
+          Date of all the doses' administrations using the international standard format.
+        \end{footnotesize}
+      \item supplier (fornitore): \emph{keyword} \\
+        \begin{footnotesize}
+          Brand of the administrated vaccine, mapped as keyword since entries are 
+          enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item area (area): \emph{keyword} \\
+        \begin{footnotesize}
+          Abbreviation for a region's name, mapped as keyword since entries are 
+          enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+        \begin{footnotesize}
+          Age range of the people administered with the vaccines, mapped as keyword since
+          entries are enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item male\_gender (sesso\_maschile): \emph{long} \\
+        \begin{footnotesize}
+          Total number of vaccinations administered to males by day and region, mapped as
+          a long since it represents a possibly large number.
+        \end{footnotesize}
+      \item female\_gender (sesso\_femminile): \emph{long} \\
+        \begin{footnotesize}
+          Total number of vaccinations administered to females by day and region, mapped
+          as a long since it represents a possibly large number.
+        \end{footnotesize}
+      \item first\_dose (prima\_dose): \emph{long} \\
+        \begin{footnotesize}
+          Total number of administered first doses, mapped as a long since it represents
+          a possibly large number.
+        \end{footnotesize}
+      \item second\_dose (seconda\_dose): \emph{long} \\
+        \begin{footnotesize}
+          Total number of administered second doses, mapped as a long since it represents
+          a possibly large number.
+        \end{footnotesize}
+      \item previous\_infection (pregressa\_infezione): \emph{long} \\
+        \begin{footnotesize}
+          Total number of administered doese to subjects with a previous Covid-19 
+          infection within 3 to 6 months before the \it{administration date}, therefore 
+          needing only one dose, mapped as a long since it represents a possibly large 
+          number. 
+        \end{footnotesize}
+      \item booster\_dose (dose\_addizionale\_booster): \emph{long} \\
+        \begin{footnotesize}
+          Total number of administered booster doses, mapped as a long since it 
+          represents a possibly large number.
+        \end{footnotesize}
+      \item total\_doses: \emph{long} \\
+        \begin{footnotesize}
+          Total number of administered doses between first, second, booster and previous 
+          infection doses, mapped as a long since it represents a possibly large number.
+        \end{footnotesize}
+      \item NUTS1\_code (codice\_NUTS1): \emph{keyword} \\
+        \begin{footnotesize}
+          European classifications for territorial units (Level: NUTS 1), mapped as 
+          keyword since entries are enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item NUTS2\_code (codice\_NUTS2): \emph{keyword} \\
+        \begin{footnotesize}
+          European classifications for territorial units (Level: NUTS 2), mapped as 
+          keyword since entries are enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
+        \begin{footnotesize}
+          ISTAT code used for identifying regions, mapped as keyword since entries are 
+          enumerated and aggregation is possible, additionaly, in order to fully utilize
+          the map representation capabilities of Kibana this value needs to be joined 
+          with Kibana's own ISTAT regional codes (stored as keywords), besides, it would 
+          be useless to execute arithmetical operations on this value due to its nature.
+        \end{footnotesize}
+      \item area\_name (nome\_area): \emph{text} \\
+        \begin{footnotesize}
+          Full name of the region mapped as text in order to be better suited for queries
+          that utilize an analyzer, even though this field technically represents an 
+          enumeration we found particulary useful the ability to search for a region's 
+          name utilizing a text analyzer since there are plenty other fields that can be 
+          used to aggregate regions.
+        \end{footnotesize}
+    \end{itemize}
+  \item Schema for \textbf{population} (platea.csv):
+    \begin{itemize}
+      \item area (area): \emph{keyword} \\
+        \begin{footnotesize}
+          Abbreviation for a region's name, mapped as keyword since entries are 
+          enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item area\_name (nome\_area): \emph{text} \\
+        \begin{footnotesize}
+          Full name of the region mapped as text in order to be better suited for queries
+          that utilize an analyzer.
+        \end{footnotesize}
+      \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+        \begin{footnotesize}
+          Age range of the people administered with the vaccines, mapped as keyword since
+          entries are enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item total\_population (totale\_popolazione): \emph{long} \\
+        \begin{footnotesize}
+          Total population for an associated area and age range, mapped as a long since 
+          it represents a large number.
+        \end{footnotesize}
+    \end{itemize}
+  \item Schema for \textbf{healed} (soggetti-guariti.csv):
+    \begin{itemize}
+      \item area (area): \emph{keyword} \\
+        \begin{footnotesize}
+          Abbreviation for a region's name, mapped as keyword since entries are 
+          enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item area\_name (nome\_area): \emph{text} \\
+        \begin{footnotesize}
+          Full name of the region mapped as text in order to be better suited for queries
+          that utilize an analyzer.
+        \end{footnotesize}
+      \item age\_range (fascia\_anagrafica): \emph{keyword} \\
+        \begin{footnotesize}
+          Age range of the people administered with the vaccines, mapped as keyword since
+          entries are enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item total\_healed (totale\_healed): \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that heald from an infection in a 6 months timespan for
+          an associated area and age range, mapped as a long since it represents a large 
+          number.      
+        \end{footnotesize}
     \end{itemize}
 \end{itemize}
 
@@ -258,7 +281,7 @@ found in ‘soggetti-guariti.csv’ present in the same repository.
 \subsubsection{Number of daily vaccines for each dose}
 Total number of first, second and booster doses administred in each date.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
 "size": 0, 
@@ -289,15 +312,13 @@ GET /index-vaccines_administrations/_search
   } 
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Number of doses per gender in each region}
 Total doses administred to men and women in each region. 
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
 "size": 0, 
@@ -323,15 +344,13 @@ GET /index-vaccines_administrations/_search
   } 
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Number of vaccines per dose number in each region}
 Total number of first, second, booster and total doses administred in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
 "size": 0, 
@@ -367,15 +386,14 @@ GET /index-vaccines_administrations/_search
   } 
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
 
-\noindent
-
 \subsubsection{Number of doses for each vaccine supplier}
-Total doses for each vaccine supplier (Pfizer/BioNTech, Moderna, Vaxzevria (AstraZeneca), Janssen, Pfizer Pediatrico).
+Total doses for each vaccine supplier (Pfizer/BioNTech, Moderna, Vaxzevria  \\
+(AstraZeneca), Janssen, Pfizer Pediatrico).
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
@@ -393,15 +411,14 @@ GET /index-vaccines_administrations/_search
   }
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
 
-\noindent
-
 \subsubsection{Number of doses for each NUTS1 zone}
-Total number of doses administred in each NUTS1 zone (ITC= NorthWest, ITH = NorthEast, ITI = Center, ITF = South, ITG = Isles)
+Total number of doses administred in each NUTS1 zone (ITC= NorthWest, \\ 
+ITH = NorthEast, ITI = Center, ITF = South, ITG = Isles)
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
@@ -418,15 +435,14 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
 
-\noindent
-
 \subsubsection{Number of people with previous infection by region}
-Total number of people who was infected by Covid-19 before the vaccination in each region.
+Total number of people who was infected by Covid-19 before the vaccination in each 
+region.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
   "size":0,
@@ -445,16 +461,14 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
 
-\noindent
-
 \subsubsection{Number of doses for each age group}
-Total number of doses administred to each age range ('05-11', '12-19', '20-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89',
-       '90+').
+Total number of doses administred to each age range ('05-11', '12-19', '20-29', '30-39',
+'40-49', '50-59', '60-69', '70-79', '80-89', '90+').
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
@@ -472,15 +486,16 @@ GET /index-vaccines_administrations/_search
   }
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
 
-\noindent
+\paragraph{Grouping by age range and region} \mbox{}
 
-\subsubsubsection{Grouping by age range and region}
+\vspace*{1em}
+
 Total number of doses administred to each age range in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
@@ -503,15 +518,13 @@ GET /index-vaccines_administrations/_search
   }
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Number of average doses per region}
 Average umber of administred doses in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {"size":0,
   "aggs": {
@@ -528,15 +541,13 @@ GET /index-vaccines_administrations/_search
   }
 }
 
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Number of doses for age group and vaccine supplier}
 Total number of doses divided by age group and vaccine supplier.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
   "size": 0,
@@ -569,15 +580,13 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Number of booster doses for age range}
 Total number of booster doses for each age range.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
   "size": 0,
@@ -596,15 +605,13 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Top 10 dates with most vaccinations}
 Top 10 dates having the highest number of administred doses.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET index-vaccines_administrations/_search
 {
   "size": 0,
@@ -631,15 +638,13 @@ GET index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Search by region name}
 Returns information about vaccines in the specified region.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 GET /index-vaccines_administrations/_search
 {
   "query": {
@@ -648,16 +653,15 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-\noindent
 
 \subsection{Commands}
 
 \subsubsection{Add entries for a given day}
 Add a new document in the dataset.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 POST /index-vaccines_administrations/_doc/
  {    
     "area" : "FVG",
@@ -677,15 +681,13 @@ POST /index-vaccines_administrations/_doc/
     "female_gender" : 0,
     "total_doses" : 3
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \subsubsection{Remove entries from a given day}
 Remove all documents in the specified date.
 \begin{tcolorbox}[fontupper=\scriptsize]
-    \begin{verbatim}
+  \begin{verbatim}
 POST /index-vaccines_administrations/_delete_by_query
 {
   "query": {
@@ -694,28 +696,34 @@ POST /index-vaccines_administrations/_delete_by_query
     }
   }
 }
-    \end{verbatim}
+  \end{verbatim}
 \end{tcolorbox}
-
-\noindent
 
 \clearpage
 
 \section{Data Visualization with Kibana}
+
 We used the dashboard to give a visual representation of the most meaningful queries. \\
-In order to use this dashboard, you need to create three indexes (one for each csv file) and name them respectively: "index-vaccines\_administrations", "index-population" and "index-healed". \\
-Then, you need to add in the "index-patterns" section an aggregate index named "index"; it will create an overall "index-*" that combines all the indexes allowing you to see some visualizations in the dashboard. 
+In order to use this dashboard, you need to create three indexes (one for each csv file)
+and name them respectively: "index-vaccines\_administrations", "index-population" and 
+"index-healed". \\
+Then, you need to add in the "index-patterns" section an aggregate index named "index"; 
+it will create an overall "index-*" that combines all the indexes allowing you to see 
+some visualizations in the dashboard. 
 
 \subsection{Screenshots}
-We used a control panel to allow to filter the results of the other elements of the dashboard based on region, vaccine supplier and age range.
+We used a control panel to allow to filter the results of the other elements of the 
+dashboard based on region, vaccine supplier and age range.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.9\linewidth]{img (2).png}
 \end{figure}
 
 \subsubsection{Map visualization}
-It allows to represent a dynamic map of Italy divided in regions. By default it shows the number of administred first doses in each region. \\ 
-By hovering over a region, it shows a description of the number of vaccinations for each type (first, second, booster doses and so on) administered by that region.
+It allows to represent a dynamic map of Italy divided in regions. By default it shows the
+number of administred first doses in each region. \\ 
+By hovering over a region, it shows a description of the number of vaccinations for each
+type (first, second, booster doses and so on) administered by that region.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=1\linewidth]{img (4).png}
@@ -723,7 +731,8 @@ By hovering over a region, it shows a description of the number of vaccinations 
 \end{figure}
 
 \subsubsection{Pie Chart}
-It represents the percentage of doses for each vaccine brand and for each NUTS1 over the total administred vaccines.
+It represents the percentage of doses for each vaccine brand and for each NUTS1 over the
+total administred vaccines.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=1\linewidth]{img (7).png}
@@ -731,7 +740,9 @@ It represents the percentage of doses for each vaccine brand and for each NUTS1 
 \end{figure}
 
 \subsubsection{Metric Visualization}
-It represents the percentage of people with at least one/two ore three doses and the number of people who healed from Covid-19 in the selected region (or in Italy if none is selected).
+It represents the percentage of people with at least one/two ore three doses and the 
+number of people who healed from Covid-19 in the selected region (or in Italy if none 
+is selected).
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.8\linewidth]{img (8).png}
@@ -739,7 +750,9 @@ It represents the percentage of people with at least one/two ore three doses and
 \end{figure}
 
 \subsubsection{Number of vaccines by genre}
-Represents a comparison between the total number of vaccines done by males and females, in each week from the starting date selected. By hovering with the mouse, a more detailed percentage is shown.
+Represents a comparison between the total number of vaccines done by males and females,
+in each week from the starting date selected. By hovering with the mouse, a more 
+detailed percentage is shown.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.8\linewidth]{img (9).png}
@@ -755,7 +768,8 @@ Represents the average number of vaccines administred in each region.
 \end{figure}
 
 \subsubsection{Number of 1st, 2nd and booster doses per week}
-It shows a graph that, for each week from the starting date selected, represents the trend of the total doses administered by type (1st, 2nd or booster doses).
+It shows a graph that, for each week from the starting date selected, represents the 
+trend of the total doses administered by type (1st, 2nd or booster doses).
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.8\linewidth]{img (11).png}
@@ -777,7 +791,7 @@ It shows the total number of administred doses in each day.
 \section{Other features in HBase} 
 
 We deciced to use \emph{HBase} as an alternative NoSQL DBMS in order to implement some 
-additional features.vfill \\
+additional features. \\
 \emph{HBase} is a column-oriented DBMS usually utilized in the context of the 
 \emph{Apache Hadoop} framework, it can be run locally using \emph{Apache Zookeeper} or 
 by installing \emph{Hadoop} and running \emph{HBase} on top of \emph{HDFS}.
