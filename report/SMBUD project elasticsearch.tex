@@ -703,11 +703,15 @@ POST /index-vaccines_administrations/_delete_by_query
 
 \section{Data Visualization with Kibana}
 We used the dashboard to give a visual representation of the most meaningful queries. \\
-In order to use this dashboard, you need to create three indexes (one for each csv file) and name them respectively: "index-vaccines\_administrations", \todo{change name}"index-vaccines\_administrations" and "index-healed". \\
+In order to use this dashboard, you need to create three indexes (one for each csv file) and name them respectively: "index-vaccines\_administrations", "index-population" and "index-healed". \\
 Then, you need to add in the "index-patterns" section an aggregate index named "index"; it will create an overall "index-*" that combines all the indexes allowing you to see some visualizations in the dashboard. 
 
 \subsection{Screenshots}
-
+We used a control panel to allow to filter the results of the other elements of the dashboard based on region, vaccine supplier and age range.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=1\linewidth]{img (2).png}
+\end{figure}
 
 \clearpage
 
