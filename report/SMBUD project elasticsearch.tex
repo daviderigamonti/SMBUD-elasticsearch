@@ -719,7 +719,7 @@ We used a control panel to allow to filter the results of the other elements of 
 \section{Other features in HBase} 
 
 We deciced to use \emph{HBase} as an alternative NoSQL DBMS in order to implement some 
-additional features. \\
+additional features.vfill \\
 \emph{HBase} is a column-oriented DBMS usually utilized in the context of the 
 \emph{Apache Hadoop} framework, it can be run locally using \emph{Apache Zookeeper} or 
 by installing \emph{Hadoop} and running \emph{HBase} on top of \emph{HDFS}.
@@ -729,7 +729,7 @@ by installing \emph{Hadoop} and running \emph{HBase} on top of \emph{HDFS}.
 In order to import data into \emph{HBase}, the first step is to eliminate the labels 
 from the csv file containing raw data. \\
 In our case the file has been renamed as \emph{vaccines\_administrations\_latest.csv} 
-and a \\ unique ID generated using \emph{Python}'s \texttt{uuid.uuid4()} function 
+and a \\ unique ID generated using \emph{Python} \texttt{uuid.uuid4()} function 
 (from the \texttt{uuid} library) has been added as the first item for each row since
 HBase expects a row key in that particular position. \\ 
 The unique ID was generate in this way since an incremental sequential number as a 
@@ -760,7 +760,7 @@ Notice that we are creating five column families for some of the columns of the 
 this is done for accessing and querying the data in a more easier and flexible way using
 \emph{Apache Drill}. 
 
-\noindent
+\vfill % Aesthetic purpose
 
 \begin{footnotesize}
   \begin{itemize}
@@ -779,7 +779,13 @@ Once we submit this command a \emph{MapReduce} that will import the CSV file int
 HBase table that we created will start. \\
 Each column of the CSV file is mapped into the respective column family.  \\
 \texttt{<PATH>} needs be changed to the HDFS path if we are using \emph{Hadoop} or to 
-the local path of the CSV file if we are using \emph{Zookeeper}. 
+the local path of the CSV file if we are using \emph{Zookeeper}. \\
+The output should resemble the following: 
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{hbase_import.png}
+\end{figure}
 
 \subsection{Querying HBase}
 
@@ -811,10 +817,10 @@ GROUP BY date_time
 \end{tcolorbox}
 
 \noindent
+Possible result:
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=.6\linewidth]{polimi.png}
-  \caption*{Possible result:.} % Caption
+  \includegraphics[width=\linewidth]{hbase_query_1.png}
 \end{figure}
 
 \subsubsection{Number of doses for each vaccine supplier}
@@ -833,11 +839,13 @@ GROUP BY supplier
   \end{verbatim}
 \end{tcolorbox}
 
+\clearpage % Aesthetic purpose
+
 \noindent
+Possible result:
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=.6\linewidth]{polimi.png}
-  \caption*{Possible result:.} % Caption
+  \includegraphics[width=\linewidth]{hbase_query_2.png}
 \end{figure}
 
 \subsubsection{Top 10 dates with most vaccinations}
@@ -859,10 +867,10 @@ LIMIT 10;
 \end{tcolorbox}
 
 \noindent
+Possible result:
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=.6\linewidth]{polimi.png}
-  \caption*{Possible result:.} % Caption
+  \includegraphics[width=\linewidth]{hbase_query_3.png}
 \end{figure}
 
 \clearpage
