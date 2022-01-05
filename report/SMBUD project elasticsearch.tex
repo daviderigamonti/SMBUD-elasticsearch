@@ -12,6 +12,7 @@
 \usepackage[font=small, labelfont=bf]{caption} % Image caption font
 \usepackage{longtable} % Build long tables
 \usepackage{xurl} % URL breaking
+\usepackage{float} % URL breaking
 
 % HELPER PACKAGES (REMOVE IN FINAL) %
 \usepackage{blindtext} % Lorem Ipsum
@@ -712,8 +713,8 @@ it will create an overall "index-*" that combines all the indexes allowing you t
 some visualizations in the dashboard. 
 
 \subsection{Screenshots}
-We used a control panel to allow to filter the results of the other elements of the 
-dashboard based on region, vaccine supplier and age range.
+\subsubsection{Control panel}
+It allows to filter the results of the other elements of the dashboard based on region, vaccine supplier and age range.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.9\linewidth]{img (2).png}
@@ -724,30 +725,32 @@ It allows to represent a dynamic map of Italy divided in regions. By default it 
 number of administred first doses in each region. \\ 
 By hovering over a region, it shows a description of the number of vaccinations for each
 type (first, second, booster doses and so on) administered by that region.
-\begin{figure}[ht]
+
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (4)bis.png}
+  \includegraphics[width=.8\linewidth]{img (4).png}
 \caption*{Map of Italy}
 \end{figure}
-\begin{figure}[ht]
+
+\begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (5).png}
-\caption*{Result of hovering (right)}
+\caption*{Result of hovering}
 \end{figure}
 
 \subsubsection{Pie charts}
 The two pie charts represent the percentage of doses for each vaccine brand and for each NUTS1 over the total administred vaccines.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=1\linewidth]{img (7).png}
 \caption*{Percentage of doses for each vaccine brand  (left) and for each NUTS1 (right)}
 \end{figure}
 
 \subsubsection{Metric Visualization}
-It represents the percentage of people with at least one/two ore three doses and the 
+It represents the percentage of people with at least one/two or three doses and the 
 number of people who healed from Covid-19 in the selected region (or in Italy if none 
 is selected).
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (8).png}
 \caption*{Metric visualization}
@@ -757,7 +760,7 @@ is selected).
 Represents a comparison between the total number of vaccines done by males and females,
 in each week from the starting date selected. By hovering with the mouse, a more 
 detailed percentage is shown.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (9).png}
 \caption*{Number of vaccines by genre}
@@ -765,7 +768,7 @@ detailed percentage is shown.
 
 \subsubsection{Average number of vaccines by region}
 Represents the average number of vaccines administred in each region.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (10).png}
 \caption*{Average number of vaccines by region}
@@ -774,41 +777,41 @@ Represents the average number of vaccines administred in each region.
 \subsubsection{Number of 1st, 2nd and booster doses per week}
 It shows a graph that, for each week from the starting date selected, represents the 
 trend of the total doses administered by type (1st, 2nd or booster doses).
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (11).png}
+  \includegraphics[width=.9\linewidth]{img (11).png}
 \caption*{Number of 1st, 2nd and booster doses}
 \end{figure}
 
 \subsubsection{Total number of vaccines by date}
 It shows the total number of administred doses in each day.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (12).png}
+  \includegraphics[width=1\linewidth]{img (12).png}
 \caption*{Total number of vaccines by date}
 \end{figure}
 
 \subsubsection{Number of vaccines per gender in each region}
 It shows the top 10 regions for number of administred doses divided by gender.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (14).png}
+  \includegraphics[width=.9\linewidth]{img (14).png}
 \caption*{Number of vaccines per gender in each region}
 \end{figure}
 
 \subsubsection{Number of vaccinations by age range}
 It shows the number of administred doses for each age range, sorted by number of doses.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (15).png}
+  \includegraphics[width=.85\linewidth]{img (15).png}
 \caption*{Number of vaccinations by age range}
 \end{figure}
 
 \subsubsection{Number of people with previous infection in each region}
 It shows, for each region, the number of people who was infected by Covid-19 before doing the vaccination.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \includegraphics[width=.8\linewidth]{img (16).png}
+  \includegraphics[width=.9\linewidth]{img (16).png}
 \caption*{Number of people with previous infection in each region}
 \end{figure}
 
