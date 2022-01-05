@@ -749,7 +749,12 @@ The two pie charts represent the percentage of doses for each vaccine brand and 
 \subsubsection{Metric Visualization}
 It represents the percentage of people with at least one/two or three doses and the 
 number of people who healed from Covid-19 in the selected region (or in Italy if none 
-is selected).
+is selected). \\
+These numbers are obtained by integrating two different datasets:
+ \begin{itemize}
+\item The percentages of vaccinated people are calculated using data about the total population in each region from \emph{platea.csv};
+\item The number of healed people for each region can be found in \emph{soggetti-guariti.csv}.
+ \end{itemize}
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (8).png}
