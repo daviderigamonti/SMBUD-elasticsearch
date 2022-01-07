@@ -104,17 +104,17 @@
 The idea of the project is to use Elasticsearch to store and analyze data about 
 COVID-19 vaccinations in Italy. The data we used can be found in the following 
 GitHub repository: \url{https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv}
-and contains data about daily vaccinations divided by region and age range. \\ 
+and contains data about daily vaccinations divided by region, age range and vaccine supplier. \\ 
 The main goal is to analyze the data in order to build meaningful statistics 
 about the vaccinations in Italy; examples can be the total number of doses for each 
-vaccine brand, the top regions for vaccine administration etc.
+vaccine brand, the top regions for vaccine administration and so on.
 
 \subsection{Hypoteses}
 
 \begin{itemize}
   \item[] We assumed that the general user doesn't know the italian language, therefore
     all the fields' names contained in the dataset were renamed to an appropriate 
-    english translation 
+    english translation.
 \end{itemize}
   
 \clearpage
@@ -173,7 +173,7 @@ vaccine brand, the top regions for vaccine administration etc.
         \end{footnotesize}
       \item previous\_infection (pregressa\_infezione): \emph{long} \\
         \begin{footnotesize}
-          Total number of administered doese to subjects with a previous Covid-19 
+          Total number of administered doses to subjects with a previous Covid-19 
           infection within 3 to 6 months before the \it{administration date}, therefore 
           needing only one dose, mapped as a long since it represents a possibly large 
           number. 
@@ -185,7 +185,7 @@ vaccine brand, the top regions for vaccine administration etc.
         \end{footnotesize}
       \item total\_doses: \emph{long} \\
         \begin{footnotesize}
-          Total number of administered doses between first, second, booster and previous 
+          Total number of administered doses considering first, second, booster and previous 
           infection doses, mapped as a long since it represents a possibly large number.
         \end{footnotesize}
       \item NUTS1\_code (codice\_NUTS1): \emph{keyword} \\
@@ -201,7 +201,7 @@ vaccine brand, the top regions for vaccine administration etc.
       \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
         \begin{footnotesize}
           ISTAT code used for identifying regions, mapped as keyword since entries are 
-          enumerated and aggregation is possible, additionaly, in order to fully utilize
+          enumerated and aggregation is possible. Additionaly, in order to fully utilize
           the map representation capabilities of Kibana this value needs to be joined 
           with Kibana's own ISTAT regional codes (stored as keywords), besides, it would 
           be useless to execute arithmetical operations on this value due to its nature.
@@ -209,8 +209,8 @@ vaccine brand, the top regions for vaccine administration etc.
       \item area\_name (nome\_area): \emph{text} \\
         \begin{footnotesize}
           Full name of the region mapped as text in order to be better suited for queries
-          that utilize an analyzer, even though this field technically represents an 
-          enumeration we found particulary useful the ability to search for a region's 
+          that utilize an analyzer. Even though this field technically represents an 
+          enumeration, we found particulary useful the ability to search for a region's 
           name utilizing a text analyzer since there are plenty other fields that can be 
           used to aggregate regions.
         \end{footnotesize}
@@ -267,8 +267,7 @@ vaccine brand, the top regions for vaccine administration etc.
 \subsection{Dataset description}
 
 The dataset contains data about COVID-19 vaccinations in Italy. \\
-For each day, region and age range we have information about the number of vaccinated 
-people (male and female), the number of 1st, 2nd and booster doses and information 
+For each day, region, age range and vaccine supplier we have information about: the number of vaccinated people (male and female), the number of 1st, 2nd and booster doses and information 
 about the number of people who was previously infected. \\
 We decided to integrate this data using the ‘platea.csv’ dataset that can be found 
 in the specified repository; it contains data about the population for each region 
@@ -317,7 +316,7 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \subsubsection{Number of doses per gender in each region}
-Total doses administred to men and women in each region. 
+Total doses administred to men and to women in each region. 
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -440,8 +439,7 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \subsubsection{Number of people with previous infection by region}
-Total number of people who was infected by Covid-19 before the vaccination in each 
-region.
+Total number of people who was infected by Covid-19 within 3 to 6 months before the date of the vaccination in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -523,7 +521,7 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \subsubsection{Number of average doses per region}
-Average umber of administred doses in each region.
+Average number of administred doses in each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -545,8 +543,8 @@ GET /index-vaccines_administrations/_search
   \end{verbatim}
 \end{tcolorbox}
 
-\subsubsection{Number of doses for age group and vaccine supplier}
-Total number of doses divided by age group and vaccine supplier.
+\subsubsection{Number of doses for each age group and vaccine supplier}
+Total number of doses by age group and vaccine supplier.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -747,7 +745,7 @@ The two pie charts represent the percentage of doses for each vaccine brand and 
 \end{figure}
 
 \subsubsection{Metric Visualization}
-It represents the percentage of people with at least one/two or three doses and the 
+It represents the percentage of people with at least one, two or three doses together with the 
 number of people who healed from Covid-19 in the selected region (or in Italy if none 
 is selected). \\
 These numbers are obtained by integrating two different datasets:
