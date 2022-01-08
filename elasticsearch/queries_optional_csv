@@ -1,0 +1,199 @@
+1) Percentage of fully vaccinated people per region
+2) Percentage of infected and then healed people per region
+3) Daily cases with positive and hospitalization
+4) Ratio between positive and hospitalized people
+
+1)
+GET vaccinations_info,vaccinations_area/_search
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "@timestamp",
+      "format": "date_time"
+    },
+    {
+      "field": "administration_date",
+      "format": "date_time"
+    }
+  ],
+  "aggs": {
+    "area_percentage": {
+      "terms": {
+        "field": "area",
+        "size": 26
+      },
+      "aggs": {
+        "hits": {
+          "top_hits": {
+            "size": 1,
+            "_source": {
+              "includes": "area_name"
+            }
+          }
+        },
+        "total_population": {
+          "sum": {
+            "field": "total_population"
+          }
+        },
+        "second_dose": {
+          "sum": {
+            "field": "second_dose"
+          }
+        },
+        "percentage_second_doses": {
+          "bucket_script": {
+            "buckets_path": {
+              "total_pop": "total_population",
+              "second_dose": "second_dose"
+            },
+            "script": "100 * params.second_dose / params.total_pop"
+          }
+        }
+      }
+    }
+  }
+}
+
+2)
+GET vaccinations_healed,vaccinations_area/_search
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "@timestamp",
+      "format": "date_time"
+    },
+    {
+      "field": "administration_date",
+      "format": "date_time"
+    }
+  ],
+  "aggs": {
+    "area_percentage": {
+      "terms": {
+        "field": "area",
+        "size": 26
+      },
+      "aggs": {
+        "hits": {
+          "top_hits": {
+            "size": 1,
+            "_source": {
+              "includes": "area_name"
+            }
+          }
+        },
+        "total_population": {
+          "sum": {
+            "field": "total_population"
+          }
+        },
+        "healed": {
+          "sum": {
+            "field": "total_healed"
+          }
+        },
+        "percentage_second_doses": {
+          "bucket_script": {
+            "buckets_path": {
+              "total_pop": "total_population",
+              "healed": "healed"
+            },
+            "script": "100 * params.healed / params.total_pop"
+          }
+        }
+      }
+    }
+  }
+}
+
+3)
+GET vaccinations_covid_info/_search
+{
+"size": 0, 
+  "aggs": {
+    "Administration date": {
+      "terms": {
+        "field": "data",
+        "size": 365,
+        "order": {
+          "_key": "asc"
+        }
+      },
+      "aggs": {
+        "totalCases": {
+          "sum": {
+            "field": "totale_casi"
+          }
+        },        
+        "totalPositive": {
+          "sum": {
+            "field": "totale_positivi"
+          }
+        },        
+        "totalHospitalized": {
+          "sum": {
+            "field": "totale_ospedalizzati"
+          }
+        }
+      }
+    }
+  } 
+}
+
+4)
+GET vaccinations_covid_info/_search
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "data",
+      "format": "date"
+    }
+  ],
+  "sort": [
+    {
+      "data": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "aggs": {
+    "ratio_positive_hospitalized": {
+      "terms": {
+        "field": "data",
+        "size": 365
+      },
+      "aggs": {
+        "region": {
+          "terms": {
+            "field": "ISTAT_region_code"
+          },
+          "aggs": {
+            "total_positive": {
+              "sum": {
+                "field": "totale_positivi"
+              }
+            },
+            "total_hospitalized": {
+              "sum": {
+                "field": "totale_ospedalizzati"
+              }
+            },
+            "percentage_positive_hospitalized": {
+              "bucket_script": {
+                "buckets_path": {
+                  "total_hospitalized": "total_hospitalized",
+                  "total_positive": "total_positive"
+                },
+                "script": "100 * params.total_hospitalized / params.total_positive"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
