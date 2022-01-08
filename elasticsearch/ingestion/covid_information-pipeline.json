@@ -1,0 +1,160 @@
+{
+  "description": "Ingest pipeline created by text structure finder",
+  "processors": [
+    {
+      "csv": {
+        "field": "message",
+        "target_fields": [
+          "data",
+          "stato",
+          "codice_regione",
+          "denominazione_regione",
+          "lat",
+          "long",
+          "ricoverati_con_sintomi",
+          "terapia_intensiva",
+          "totale_ospedalizzati",
+          "isolamento_domiciliare",
+          "totale_positivi",
+          "variazione_totale_positivi",
+          "nuovi_positivi",
+          "dimessi_guariti",
+          "deceduti",
+          "casi_da_sospetto_diagnostico",
+          "casi_da_screening",
+          "totale_casi",
+          "tamponi",
+          "casi_testati",
+          "note",
+          "ingressi_terapia_intensiva",
+          "note_test",
+          "note_casi"
+        ],
+        "ignore_missing": false
+      }
+    },
+    {
+      "rename": {
+        "field": "codice_regione",
+        "target_field":"ISTAT_region_code"
+      }
+    },
+    {
+      "rename": {
+        "field": "denominazione_regione",
+        "target_field":"area_name"
+      }
+    },
+    {
+      "date": {
+        "field": "data",
+        "timezone": "{{ event.timezone }}",
+        "formats": [
+          "ISO8601"
+        ]
+      }
+    },
+    {
+      "convert": {
+        "field": "deceduti",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "dimessi_guariti",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "isolamento_domiciliare",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "lat",
+        "type": "double",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "long",
+        "type": "double",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "nuovi_positivi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "ricoverati_con_sintomi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "tamponi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "terapia_intensiva",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "totale_casi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "totale_ospedalizzati",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "totale_positivi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "variazione_totale_positivi",
+        "type": "long",
+        "ignore_missing": true
+      }
+    },
+    {
+      "remove": {
+        "field": "message"
+      }
+    },
+    {
+      "set": {
+        "field": "location",
+        "value": "{{lat}},{{long}}"
+      }
+    }
+  ]
+}
