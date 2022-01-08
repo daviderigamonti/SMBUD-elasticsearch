@@ -1,0 +1,68 @@
+{
+  "properties": {
+    "@timestamp": {
+      "type": "date"
+    },
+    "ISTAT_region_code": {
+      "type": "keyword"
+    },
+    "data": {
+      "type": "date",
+      "format": "iso8601"
+    },
+    "deceduti": {
+      "type": "long"
+    },
+    "area_name": {
+      "type": "text"
+    },
+    "dimessi_guariti": {
+      "type": "long"
+    },
+    "isolamento_domiciliare": {
+      "type": "long"
+    },
+    "lat": {
+      "type": "double"
+    },
+    "long": {
+      "type": "double"
+    },
+    "note": {
+      "type": "text"
+    },
+    "note_casi": {
+      "type": "text"
+    },
+    "nuovi_positivi": {
+      "type": "long"
+    },
+    "ricoverati_con_sintomi": {
+      "type": "long"
+    },
+    "stato": {
+      "type": "keyword"
+    },
+    "tamponi": {
+      "type": "long"
+    },
+    "terapia_intensiva": {
+      "type": "long"
+    },
+    "totale_casi": {
+      "type": "long"
+    },
+    "totale_ospedalizzati": {
+      "type": "long"
+    },
+    "totale_positivi": {
+      "type": "long"
+    },
+    "variazione_totale_positivi": {
+      "type": "long"
+    },
+    "location": {
+      "type": "geo_point"
+    }
+  }
+}
