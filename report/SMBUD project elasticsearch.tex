@@ -114,9 +114,7 @@ vaccine brand, the top regions for vaccine administration and so on.
 \begin{itemize}
   \item[] We assumed that the general user doesn't know the italian language, therefore
     all the fields' names contained in the dataset were renamed to an appropriate 
-    english translation. For the file dpc-covid19-ita-regioni.csv we manteined the italian
-    language for all the fields' names due to a problem with the ingestion. Only the common
-    field with the other files has been renamed.
+    english translation.
 \end{itemize}
   
 \clearpage
@@ -887,6 +885,7 @@ GET /index-healed,index-population/_search
 
 \subsubsection{Daily number of total cases, hospitalizations and positives}
 It returns, for each day, the total number of cases, hopitalizations and the total number of positives. \\
+This is not the total of the single day, but the general total that is increased day by day. \\
 We used data coming from \emph{dpc-covid-19-ita-regioni.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
@@ -894,7 +893,7 @@ GET /index-covid-information/_search
 {
 "size": 0, 
   "aggs": {
-    "Administration date": {
+    "date": {
       "terms": {
         "field": "data",
         "size": 365,
@@ -905,17 +904,17 @@ GET /index-covid-information/_search
       "aggs": {
         "totalCases": {
           "sum": {
-            "field": "totale_casi"
+            "field": "total_case"
           }
         },        
         "totalPositive": {
           "sum": {
-            "field": "totale_positivi"
+            "field": "total_positive"
           }
         },        
         "totalHospitalized": {
           "sum": {
-            "field": "totale_ospedalizzati"
+            "field": "total_hospitalized"
           }
         }
       }
@@ -960,12 +959,12 @@ GET /index-vaccines_administrations/_search
           "aggs": {
             "total_positive": {
               "sum": {
-                "field": "totale_positivi"
+                "field": "total_positive"
               }
             },
             "total_hospitalized": {
               "sum": {
-                "field": "totale_ospedalizzati"
+                "field": "total_hospitalized"
               }
             },
             "percentage_positive_hospitalized": {
