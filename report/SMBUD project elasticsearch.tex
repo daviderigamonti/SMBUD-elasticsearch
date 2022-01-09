@@ -114,7 +114,9 @@ vaccine brand, the top regions for vaccine administration and so on.
 \begin{itemize}
   \item[] We assumed that the general user doesn't know the italian language, therefore
     all the fields' names contained in the dataset were renamed to an appropriate 
-    english translation.
+    english translation. For the file dpc-covid19-ita-regioni.csv we manteined the italian
+    language for all the fields' names due to a problem with the ingestion. Only the common
+    field with the other files has been renamed.
 \end{itemize}
   
 \clearpage
@@ -262,6 +264,109 @@ vaccine brand, the top regions for vaccine administration and so on.
           number.      
         \end{footnotesize}
     \end{itemize}
+  \item Schema for \textbf{covid-information} (dpc-covid19-ita-regioni.csv):
+    \begin{itemize}
+      \item data: \emph{date} \\
+        \begin{footnotesize}
+          Date of the government information.
+        \end{footnotesize}
+      \item area\_name (denominazione\_regione): \emph{text} \\
+        \begin{footnotesize}
+          Full name of the region mapped as text in order to be better suited for queries
+          that utilize an analyzer.
+        \end{footnotesize}
+      \item ISTAT\_region\_code: \emph{keyword} \\
+        \begin{footnotesize}
+          ISTAT code used for identifying regions, mapped as keyword since entries are 
+          enumerated and aggregation is possible. Additionaly, in order to fully utilize
+          the map representation capabilities of Kibana this value needs to be joined 
+          with Kibana's own ISTAT regional codes (stored as keywords), besides, it would 
+          be useless to execute arithmetical operations on this value due to its nature.
+        \end{footnotesize}
+      \item deceduti: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that are deceased due to Covid19, mapped as long since it 
+          represents a large number.
+        \end{footnotesize}
+      \item dimessi\_guariti: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been discharged from the hospital because they have 
+          recovered from Covid19, mapped as long since it represents a large number.
+        \end{footnotesize}
+      \item isolamento\_domiciliare: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that are home isolated due to Covid19, mapped as long since it 
+          represents a large number.
+        \end{footnotesize}
+      \item lat: \emph{double} \\
+        \begin{footnotesize}
+          Latitude of the region, mapped as double since it's a float number.
+        \end{footnotesize}
+      \item long: \emph{double} \\
+        \begin{footnotesize}
+          Longitude of the region, mapped as double since it's a float number.
+        \end{footnotesize}
+      \item note: \emph{text} \\
+        \begin{footnotesize}
+          General notes from the government, mapped as text in order to be better suited for queries
+          that utilize an analyzer.
+        \end{footnotesize}
+      \item note\_casi: \emph{text} \\
+        \begin{footnotesize}
+          Notes related to the tested cases from the government, mapped as text in order to be better 
+          suited for queries that utilize an analyzer.
+        \end{footnotesize}
+      \item nuovi\_positivi: \emph{long} \\
+        \begin{footnotesize}
+          Daily new number of people that have been tested positive due to Covid19, mapped as long since it 
+          represents a large number.
+        \end{footnotesize}
+      \item ricoverati\_con\_sintomi: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been hospitalized with symptoms to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize}
+      \item stato: \emph{keyword} \\
+        \begin{footnotesize}
+          Code indicating the country, mapped as keyword since entries are 
+          enumerated and aggregation is possible.
+        \end{footnotesize}
+      \item tamponi: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been tested to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize}
+      \item terapia\_intensiva: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that are in intensive care due to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize}
+      \item totale\_casi: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been tested to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize}
+      \item totale\_ospedalizzati: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been hospitalized due to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize}
+      \item totale\_positivi: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been tested positive to Covid19, mapped as long 
+          since it represents a large number.
+        \end{footnotesize} 
+      \item variazione\_totale\_positivi: \emph{long} \\
+        \begin{footnotesize}
+          Daily variation of the total number of people that have been tested positive to Covid19, 
+          mapped as long since it represents a large number.
+        \end{footnotesize}
+      \item location: \emph{geo_point} \\
+        \begin{footnotesize}
+          The combination of the lat and long fields, mapped as geo_point since it
+          represents a coordinate.
+        \end{footnotesize}    
+    \end{itemize}
 \end{itemize}
 
 \subsection{Dataset description}
@@ -273,7 +378,9 @@ We decided to integrate this data using the ‘platea.csv’ dataset that can be
 in the specified repository; it contains data about the population for each region 
 and each age range. \\ 
 We also used information about the number of healed people in each region that can be 
-found in ‘soggetti-guariti.csv’ present in the same repository.
+found in ‘soggetti-guariti.csv’ present in the same repository. \\
+In addition, we used the ‘dpc-covid19-ita-regioni.csv’ dataset to have more information about
+the pandemic, from the total number of positive to the number of hospitalized and deceased people.
 
 %QUERIES
 \subsection{Queries}
@@ -657,10 +764,10 @@ GET /index-vaccines_administrations/_search
 
 \subsubsection{Percentage of fully vaccinated people per region}
 It return the percentage of fully vaccinated people (i.e. having 1st and 2nd dose) in each region.\\
-To do so, we used data about the total population of each region contained into \emph{platea.csv}.\todo{nomi index!!!}
+To do so, we used data about the total population of each region contained into \emph{platea.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
-GET vaccinations_info,vaccinations_area/_search 
+GET /index-vaccines_administrations,index-population/_search 
 {
   "size": 0,
   "fields": [
@@ -720,11 +827,11 @@ It returns the number of healed people over the total population for each region
 We used:
  \begin{itemize}
 \item The data about the total population in each region from \emph{platea.csv};
-\item The number of healed people for each region that can be found in \emph{soggetti-guariti.csv}.\todo{nomi index!!!}
+\item The number of healed people for each region that can be found in \emph{soggetti-guariti.csv}.
  \end{itemize}
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
-GET vaccinations_healed,vaccinations_area/_search 
+GET /index-healed,index-population/_search 
 {
   "size": 0,
   "fields": [
@@ -780,10 +887,10 @@ GET vaccinations_healed,vaccinations_area/_search
 
 \subsubsection{Daily number of total cases, hospitalizations and positives}
 It returns, for each day, the total number of cases, hopitalizations and the total number of positives. \\
-We used data coming from \emph{dpc-covid-19-ita-regioni-combined.csv}. \todo{nomi index}
+We used data coming from \emph{dpc-covid-19-ita-regioni.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
-GET vaccinations_covid_info/_search 
+GET /index-covid-information/_search 
 {
 "size": 0, 
   "aggs": {
@@ -819,11 +926,11 @@ GET vaccinations_covid_info/_search
 \end{tcolorbox}
 
 \subsubsection{Ratio between positive and hospitalized people}
-It returns the ratio between positive and hospitalized people in each region.\todo{nome index!!!}
+It returns the ratio between positive and hospitalized people in each region.
  \todo{ISTAT code da che index arriva?}
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
-GET vaccinations_covid_info/_search 
+GET /index-vaccines_administrations/_search 
 {
   "size": 0,
   "fields": [
