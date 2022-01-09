@@ -1,6 +1,6 @@
 1) Percentage of fully vaccinated people per region
 2) Percentage of healed people per region
-3) Daily number of cases of positive and hospitalized people
+3) Daily total number of cases of positive and hospitalized people
 4) Ratio between positive and hospitalized people
 
 1)
