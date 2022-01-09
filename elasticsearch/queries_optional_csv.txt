@@ -123,14 +123,14 @@ GET /index-covid-information/_search
         }
       },
       "aggs": {
-        "totalCases": {
+        "total_cases": {
           "sum": {
-            "field": "total_case"
+            "field": "total_cases"
           }
         },        
-        "totalPositive": {
+        "total_positives": {
           "sum": {
-            "field": "total_positive"
+            "field": "total_positives"
           }
         },        
         "totalHospitalized": {
@@ -172,9 +172,9 @@ GET /index-covid-information/_search
             "field": "ISTAT_region_code"
           },
           "aggs": {
-            "total_positive": {
+            "total_positives": {
               "sum": {
-                "field": "total_positive"
+                "field": "total_positives"
               }
             },
             "total_hospitalized": {
@@ -186,9 +186,9 @@ GET /index-covid-information/_search
               "bucket_script": {
                 "buckets_path": {
                   "total_hospitalized": "total_hospitalized",
-                  "total_positive": "total_positive"
+                  "total_positives": "total_positives"
                 },
-                "script": "100 * params.total_hospitalized / params.total_positive"
+                "script": "100 * params.total_hospitalized / params.total_positives"
               }
             }
           }
