@@ -54,7 +54,7 @@
     {
       "rename": {
           "field": "stato",
-          "target_field": "state"
+          "target_field": "country"
       }
     },
     {

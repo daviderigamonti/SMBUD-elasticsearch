@@ -40,7 +40,7 @@
     "hospitalized_with_symptoms": {
       "type": "long"
     },
-    "state": {
+    "country": {
       "type": "keyword"
     },
     "tests": {
