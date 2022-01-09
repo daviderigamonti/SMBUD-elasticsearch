@@ -133,7 +133,7 @@ GET /index-covid-information/_search
             "field": "total_positives"
           }
         },        
-        "totalHospitalized": {
+        "total_hospitalized": {
           "sum": {
             "field": "total_hospitalized"
           }
