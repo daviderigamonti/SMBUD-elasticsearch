@@ -655,6 +655,231 @@ GET /index-vaccines_administrations/_search
   \end{verbatim}
 \end{tcolorbox}
 
+\subsubsection{Percentage of fully vaccinated people per region}
+It return the percentage of fully vaccinated people (i.e. having 1st and 2nd dose) in each region.\\
+To do so, we used data about the total population of each region contained into \emph{platea.csv}.\todo{nomi index!!!}
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+GET vaccinations_info,vaccinations_area/_search 
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "@timestamp",
+      "format": "date_time"
+    },
+    {
+      "field": "administration_date",
+      "format": "date_time"
+    }
+  ],
+  "aggs": {
+    "area_percentage": {
+      "terms": {
+        "field": "area",
+        "size": 26
+      },
+      "aggs": {
+        "hits": {
+          "top_hits": {
+            "size": 1,
+            "_source": {
+              "includes": "area_name"
+            }
+          }
+        },
+        "total_population": {
+          "sum": {
+            "field": "total_population"
+          }
+        },
+        "second_dose": {
+          "sum": {
+            "field": "second_dose"
+          }
+        },
+        "percentage_second_doses": {
+          "bucket_script": {
+            "buckets_path": {
+              "total_pop": "total_population",
+              "second_dose": "second_dose"
+            },
+            "script": "100 * params.second_dose / params.total_pop"
+          }
+        }
+      }
+    }
+  }
+}
+
+  \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Percentage of healed people per region}
+It returns the number of healed people over the total population for each region region. \\
+We used:
+ \begin{itemize}
+\item The data about the total population in each region from \emph{platea.csv};
+\item The number of healed people for each region that can be found in \emph{soggetti-guariti.csv}.\todo{nomi index!!!}
+ \end{itemize}
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+GET vaccinations_healed,vaccinations_area/_search 
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "@timestamp",
+      "format": "date_time"
+    },
+    {
+      "field": "administration_date",
+      "format": "date_time"
+    }
+  ],
+  "aggs": {
+    "area_percentage": {
+      "terms": {
+        "field": "area",
+        "size": 26
+      },
+      "aggs": {
+        "hits": {
+          "top_hits": {
+            "size": 1,
+            "_source": {
+              "includes": "area_name"
+            }
+          }
+        },
+        "total_population": {
+          "sum": {
+            "field": "total_population"
+          }
+        },
+        "healed": {
+          "sum": {
+            "field": "total_healed"
+          }
+        },
+        "percentage_healed": { 
+          "bucket_script": {
+            "buckets_path": {
+              "total_pop": "total_population",
+              "healed": "healed"
+            },
+            "script": "100 * params.healed / params.total_pop"
+          }
+        }
+      }
+    }
+  }
+}
+  \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Daily number of total cases, hospitalizations and positives}
+It returns, for each day, the total number of cases, hopitalizations and the total number of positives. \\
+We used data coming from \emph{dpc-covid-19-ita-regioni-combined.csv}. \todo{nomi index}
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+GET vaccinations_covid_info/_search 
+{
+"size": 0, 
+  "aggs": {
+    "Administration date": {
+      "terms": {
+        "field": "data",
+        "size": 365,
+        "order": {
+          "_key": "asc"
+        }
+      },
+      "aggs": {
+        "totalCases": {
+          "sum": {
+            "field": "totale_casi"
+          }
+        },        
+        "totalPositive": {
+          "sum": {
+            "field": "totale_positivi"
+          }
+        },        
+        "totalHospitalized": {
+          "sum": {
+            "field": "totale_ospedalizzati"
+          }
+        }
+      }
+    }
+  } 
+}
+  \end{verbatim}
+\end{tcolorbox}
+
+\subsubsection{Ratio between positive and hospitalized people}
+It returns the ratio between positive and hospitalized people in each region.\todo{nome index!!!}
+ \todo{ISTAT code da che index arriva?}
+\begin{tcolorbox}[fontupper=\scriptsize]
+  \begin{verbatim}
+GET vaccinations_covid_info/_search 
+{
+  "size": 0,
+  "fields": [
+    {
+      "field": "data",
+      "format": "date"
+    }
+  ],
+  "sort": [
+    {
+      "data": {
+        "order": "desc"
+      }
+    }
+  ], 
+  "aggs": {
+    "ratio_positive_hospitalized": {
+      "terms": {
+        "field": "data",
+        "size": 365
+      },
+      "aggs": {
+        "region": {
+          "terms": {
+            "field": "ISTAT_region_code" 
+          },
+          "aggs": {
+            "total_positive": {
+              "sum": {
+                "field": "totale_positivi"
+              }
+            },
+            "total_hospitalized": {
+              "sum": {
+                "field": "totale_ospedalizzati"
+              }
+            },
+            "percentage_positive_hospitalized": {
+              "bucket_script": {
+                "buckets_path": {
+                  "total_hospitalized": "total_hospitalized",
+                  "total_positive": "total_positive"
+                },
+                "script": "100 * params.total_hospitalized / params.total_positive"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+  \end{verbatim}
+\end{tcolorbox}
+
 \subsection{Commands}
 
 \subsubsection{Add entries for a given day}
