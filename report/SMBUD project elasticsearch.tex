@@ -104,7 +104,8 @@
 The idea of the project is to use Elasticsearch to store and analyze data about 
 COVID-19 vaccinations in Italy. The data we used can be found in the following 
 GitHub repository: \url{https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv}
-and contains data about daily vaccinations divided by region, age range and vaccine supplier. \\ 
+and contains data about daily vaccinations divided by region, age range and vaccine
+supplier. \\ 
 The main goal is to analyze the data in order to build meaningful statistics 
 about the vaccinations in Italy; examples can be the total number of doses for each 
 vaccine brand, the top regions for vaccine administration and so on.
@@ -114,9 +115,10 @@ vaccine brand, the top regions for vaccine administration and so on.
 \begin{itemize}
   \item[] We assumed that the general user doesn't know the italian language, therefore
     all the fields' names contained in the dataset were renamed to an appropriate 
-    english translation. For the file dpc-covid19-ita-regioni.csv we manteined the italian
-    language for all the fields' names due to a problem with the ingestion. Only the common
-    field with the other files has been renamed.
+    english translation. 
+  \item[] For the file dpc-covid19-ita-regioni.csv we decided to not include some fields
+    mainly because they are no longer updated or they are not entirely relevant for the
+    scope of this project 
 \end{itemize}
   
 \clearpage
@@ -203,7 +205,7 @@ vaccine brand, the top regions for vaccine administration and so on.
       \item ISTAT\_region\_code (codice\_regione\_ISTAT): \emph{keyword} \\
         \begin{footnotesize}
           ISTAT code used for identifying regions, mapped as keyword since entries are 
-          enumerated and aggregation is possible. Additionaly, in order to fully utilize
+          enumerated and aggregation is possible. Additionally, in order to fully utilize
           the map representation capabilities of Kibana this value needs to be joined 
           with Kibana's own ISTAT regional codes (stored as keywords), besides, it would 
           be useless to execute arithmetical operations on this value due to its nature.
@@ -266,7 +268,11 @@ vaccine brand, the top regions for vaccine administration and so on.
     \end{itemize}
   \item Schema for \textbf{covid-information} (dpc-covid19-ita-regioni.csv):
     \begin{itemize}
-      \item data: \emph{date} \\
+      \item @timestamp: \emph{date} \\
+        \begin{footnotesize}
+          Timestamp assigned by elasticsearch.
+        \end{footnotesize}
+      \item date: \emph{date [iso8601]} \\
         \begin{footnotesize}
           Date of the government information.
         \end{footnotesize}
@@ -278,93 +284,92 @@ vaccine brand, the top regions for vaccine administration and so on.
       \item ISTAT\_region\_code: \emph{keyword} \\
         \begin{footnotesize}
           ISTAT code used for identifying regions, mapped as keyword since entries are 
-          enumerated and aggregation is possible. Additionaly, in order to fully utilize
-          the map representation capabilities of Kibana this value needs to be joined 
-          with Kibana's own ISTAT regional codes (stored as keywords), besides, it would 
-          be useless to execute arithmetical operations on this value due to its nature.
+          enumerated and aggregation is possible.
         \end{footnotesize}
-      \item deceduti: \emph{long} \\
+      \item deceased: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that are deceased due to Covid19, mapped as long since it 
-          represents a large number.
+          Total number of people that are deceased due to Covid-19, mapped as a long 
+          since it represents a large number.
         \end{footnotesize}
-      \item dimessi\_guariti: \emph{long} \\
+      \item recovered: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that have been discharged from the hospital because they have 
-          recovered from Covid19, mapped as long since it represents a large number.
+          Total number of people that have been dismissed from the hospital because they
+          have recovered from Covid-19, mapped as a long since it represents a large 
+          number.
         \end{footnotesize}
-      \item isolamento\_domiciliare: \emph{long} \\
+      \item home\_confinement: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that are home isolated due to Covid19, mapped as long since it 
-          represents a large number.
+          Total number of people that are home confined due to Covid-19, mapped as a long
+          since it represents a large number.
         \end{footnotesize}
       \item lat: \emph{double} \\
         \begin{footnotesize}
-          Latitude of the region, mapped as double since it's a float number.
+          Latitude of the region, mapped as a double since it's a float number.
         \end{footnotesize}
       \item long: \emph{double} \\
         \begin{footnotesize}
-          Longitude of the region, mapped as double since it's a float number.
+          Longitude of the region, mapped as a double since it's a float number.
         \end{footnotesize}
-      \item note: \emph{text} \\
+      \item notes: \emph{text} \\
         \begin{footnotesize}
-          General notes from the government, mapped as text in order to be better suited for queries
-          that utilize an analyzer.
-        \end{footnotesize}
-      \item note\_casi: \emph{text} \\
-        \begin{footnotesize}
-          Notes related to the tested cases from the government, mapped as text in order to be better 
+          General notes from the government, mapped as text in order to be better 
           suited for queries that utilize an analyzer.
         \end{footnotesize}
-      \item nuovi\_positivi: \emph{long} \\
+      \item cases\_notes: \emph{text} \\
         \begin{footnotesize}
-          Daily new number of people that have been tested positive due to Covid19, mapped as long since it 
-          represents a large number.
+          Notes related to the tested cases from the government, mapped as text in order
+          to be better suited for queries that utilize an analyzer.
         \end{footnotesize}
-      \item ricoverati\_con\_sintomi: \emph{long} \\
+      \item new\_positives: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that have been hospitalized with symptoms to Covid19, mapped as long 
-          since it represents a large number.
+          Daily new number of people that have been tested positive due to Covid-19, 
+          mapped as a long since it represents a large number.
         \end{footnotesize}
-      \item stato: \emph{keyword} \\
+      \item hospitalized\_with\_symptoms: \emph{long} \\
+        \begin{footnotesize}
+          Total number of people that have been hospitalized with symptoms of Covid-19,
+          mapped as a long since it represents a large number.
+        \end{footnotesize}
+      \item country: \emph{keyword} \\
         \begin{footnotesize}
           Code indicating the country, mapped as keyword since entries are 
           enumerated and aggregation is possible.
         \end{footnotesize}
-      \item tamponi: \emph{long} \\
+      \item tests: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that have been tested to Covid19, mapped as long 
-          since it represents a large number.
+          Total number of people that have been tested for Covid-19 (using molecular 
+          tests), mapped as a long since it represents a large number.
         \end{footnotesize}
-      \item terapia\_intensiva: \emph{long} \\
+      \item intensive\_care: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that are in intensive care due to Covid19, mapped as long 
-          since it represents a large number.
+          Total number of people that are in intensive care due to Covid-19, mapped as 
+          a long since it represents a large number.
         \end{footnotesize}
-      \item totale\_casi: \emph{long} \\
+      \item total\_cases: \emph{long} \\
+        \todo{totale casi?}
         \begin{footnotesize}
-          Total number of people that have been tested to Covid19, mapped as long 
-          since it represents a large number.
+          Total number of people that have been positive cases for Covid-19, mapped as 
+          a long since it represents a large number.
         \end{footnotesize}
-      \item totale\_ospedalizzati: \emph{long} \\
+      \item total\_hospitalized: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that have been hospitalized due to Covid19, mapped as long 
-          since it represents a large number.
+          Total number of people that have been hospitalized due to Covid-19, mapped as 
+          a long since it represents a large number.
         \end{footnotesize}
-      \item totale\_positivi: \emph{long} \\
+      \item total\_positives: \emph{long} \\
         \begin{footnotesize}
-          Total number of people that have been tested positive to Covid19, mapped as long 
-          since it represents a large number.
+          Total number of people that have been found positive to Covid-19 (either via 
+          test or home isolation), mapped as a long since it represents a large number.
         \end{footnotesize} 
-      \item variazione\_totale\_positivi: \emph{long} \\
+      \item total\_positives\_variation: \emph{long} \\
         \begin{footnotesize}
-          Daily variation of the total number of people that have been tested positive to Covid19, 
-          mapped as long since it represents a large number.
+          Daily variation of the total number of people that have been tested positive 
+          to Covid-19, mapped as a long since it represents a large number.
         \end{footnotesize}
-      \item location: \emph{geo_point} \\
+      \item location: \emph{geo\_point} \\
         \begin{footnotesize}
-          The combination of the lat and long fields, mapped as geo_point since it
-          represents a coordinate.
+          The combination of the latitude and longitude fields, mapped as geo\_point 
+          since they represent a set of coordinates.
         \end{footnotesize}    
     \end{itemize}
 \end{itemize}
@@ -372,15 +377,17 @@ vaccine brand, the top regions for vaccine administration and so on.
 \subsection{Dataset description}
 
 The dataset contains data about COVID-19 vaccinations in Italy. \\
-For each day, region, age range and vaccine supplier we have information about: the number of vaccinated people (male and female), the number of 1st, 2nd and booster doses and information 
-about the number of people who was previously infected. \\
+For each day, region, age range and vaccine supplier we have information about: the 
+number of vaccinated people (male and female), the number of 1st, 2nd and booster doses
+and information about the number of people who was previously infected. \\
 We decided to integrate this data using the ‘platea.csv’ dataset that can be found 
 in the specified repository; it contains data about the population for each region 
 and each age range. \\ 
 We also used information about the number of healed people in each region that can be 
 found in ‘soggetti-guariti.csv’ present in the same repository. \\
-In addition, we used the ‘dpc-covid19-ita-regioni.csv’ dataset to have more information about
-the pandemic, from the total number of positive to the number of hospitalized and deceased people.
+In addition, we used the ‘dpc-covid19-ita-regioni.csv’ dataset to have more information 
+about the pandemic, from the total number of positives to the number of hospitalized 
+and deceased people.
 
 %QUERIES
 \subsection{Queries}
@@ -418,7 +425,6 @@ GET /index-vaccines_administrations/_search
     }
   } 
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -450,7 +456,6 @@ GET /index-vaccines_administrations/_search
     }
   } 
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -492,7 +497,6 @@ GET /index-vaccines_administrations/_search
     }
   } 
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -517,7 +521,6 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -546,7 +549,8 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \subsubsection{Number of people with previous infection by region}
-Total number of people who was infected by Covid-19 within 3 to 6 months before the date of the vaccination in each region.
+Total number of people who were infected by Covid-19 within 3 to 6 months before the 
+date of the vaccination for each region.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search
@@ -591,7 +595,6 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -623,7 +626,6 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -646,7 +648,6 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
@@ -763,8 +764,10 @@ GET /index-vaccines_administrations/_search
 \end{tcolorbox}
 
 \subsubsection{Percentage of fully vaccinated people per region}
-It return the percentage of fully vaccinated people (i.e. having 1st and 2nd dose) in each region.\\
-To do so, we used data about the total population of each region contained into \emph{platea.csv}.
+Returns the percentage of fully vaccinated people (i.e. having 1st and 2nd dose) 
+for each region. \\
+In order to obtain this resutl, we used additional data about the total population of 
+each region contained into \emph{platea.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations,index-population/_search 
@@ -818,17 +821,17 @@ GET /index-vaccines_administrations,index-population/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
 \subsubsection{Percentage of healed people per region}
-It returns the number of healed people over the total population for each region region. \\
+Returns the number of healed people over the total population for each region. \\
 We used:
- \begin{itemize}
-\item The data about the total population in each region from \emph{platea.csv};
-\item The number of healed people for each region that can be found in \emph{soggetti-guariti.csv}.
- \end{itemize}
+\begin{itemize}
+  \item Data about the total population in each region from \emph{platea.csv};
+  \item The number of healed people for each region that can be found in \\
+    \emph{soggetti-guariti.csv}.
+\end{itemize}
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-healed,index-population/_search 
@@ -886,8 +889,8 @@ GET /index-healed,index-population/_search
 \end{tcolorbox}
 
 \subsubsection{Daily number of total cases, hospitalizations and positives}
-It returns, for each day, the total number of cases, hopitalizations and the total number of positives. \\
-We used data coming from \emph{dpc-covid-19-ita-regioni.csv}.
+Returns, the total number of cases, hopitalizations and positives for each day. \\
+We used additional data from \emph{dpc-covid-19-ita-regioni.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-covid-information/_search 
@@ -926,8 +929,8 @@ GET /index-covid-information/_search
 \end{tcolorbox}
 
 \subsubsection{Ratio between positive and hospitalized people}
-It returns the ratio between positive and hospitalized people in each region.
- \todo{ISTAT code da che index arriva?}
+Returns the ratio between positive and hospitalized people for each region.
+\todo{ISTAT code da che index arriva?}
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search 
@@ -974,7 +977,7 @@ GET /index-vaccines_administrations/_search
                   "total_hospitalized": "total_hospitalized",
                   "total_positive": "total_positive"
                 },
-                "script": "100 * params.total_hospitalized / params.total_positive"
+                "script": "100*params.total_hospitalized/params.total_positive"
               }
             }
           }
@@ -983,14 +986,13 @@ GET /index-vaccines_administrations/_search
     }
   }
 }
-
   \end{verbatim}
 \end{tcolorbox}
 
 \subsection{Commands}
 
 \subsubsection{Add entries for a given day}
-Add a new document in the dataset.
+Adds a new document in the dataset.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 POST /index-vaccines_administrations/_doc/
@@ -1016,7 +1018,7 @@ POST /index-vaccines_administrations/_doc/
 \end{tcolorbox}
 
 \subsubsection{Remove entries from a given day}
-Remove all documents in the specified date.
+Removes all documents from the index for the specified date.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 POST /index-vaccines_administrations/_delete_by_query
@@ -1040,11 +1042,12 @@ and name them respectively: "index-vaccines\_administrations", "index-population
 "index-healed". \\
 Then, you need to add in the "index-patterns" section an aggregate index named "index"; 
 it will create an overall "index-*" that combines all the indexes allowing you to see 
-some visualizations in the dashboard. 
+the desired visualizations in the dashboard. \todo{nuovo csv}
 
 \subsection{Screenshots}
 \subsubsection{Control panel}
-It allows to filter the results of the other elements of the dashboard based on region, vaccine supplier and age range.
+It allows to filter the results of the other elements of the dashboard based on region,
+vaccine supplier and age range.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=.9\linewidth]{img (2).png}
@@ -1059,36 +1062,39 @@ type (first, second, booster doses and so on) administered by that region.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (4).png}
-\caption*{Map of Italy}
+  \caption*{Map of Italy}
 \end{figure}
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (5).png}
-\caption*{Result of hovering}
+  \caption*{Result of hovering}
 \end{figure}
 
 \subsubsection{Pie charts}
-The two pie charts represent the percentage of doses for each vaccine brand and for each NUTS1 over the total administred vaccines.
+The two pie charts represent the percentage of doses for each vaccine supploer and for 
+each NUTS1 over the total administred vaccines.
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\linewidth]{img (7).png}
-\caption*{Percentage of doses for each vaccine brand  (left) and for each NUTS1 (right)}
+  \caption*{Percentage of doses for each vaccine brand  (left) and for each NUTS1 (right)}
 \end{figure}
 
 \subsubsection{Metric Visualization}
-It represents the percentage of people with at least one, two or three doses together with the 
-number of people who healed from Covid-19 in the selected region (or in Italy if none 
-is selected). \\
+It represents the percentage of people with at least one, two or three doses together 
+with the number of people who healed from Covid-19 in the selected region (or the whole 
+Italy if none is selected). \\
 These numbers are obtained by integrating two different datasets:
- \begin{itemize}
-\item The percentages of vaccinated people are calculated using data about the total population in each region from \emph{platea.csv};
-\item The number of healed people for each region can be found in \emph{soggetti-guariti.csv}.
- \end{itemize}
+\begin{itemize}
+  \item The percentages of vaccinated people are calculated using data about the total
+    population in each region from \emph{platea.csv};
+  \item The number of healed people for each region can be found in 
+    \emph{soggetti-guariti.csv}.
+\end{itemize}
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (8).png}
-\caption*{Metric visualization}
+  \caption*{Metric visualization}
 \end{figure}
 
 \subsubsection{Number of vaccines by genre}
@@ -1098,7 +1104,7 @@ detailed percentage is shown.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (9).png}
-\caption*{Number of vaccines by genre}
+  \caption*{Number of vaccines by genre}
 \end{figure}
 
 \subsubsection{Average number of vaccines by region}
@@ -1106,7 +1112,7 @@ Represents the average number of vaccines administred in each region.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.8\linewidth]{img (10).png}
-\caption*{Average number of vaccines by region}
+  \caption*{Average number of vaccines by region}
 \end{figure}
 
 \subsubsection{Number of 1st, 2nd and booster doses per week}
@@ -1115,7 +1121,7 @@ trend of the total doses administered by type (1st, 2nd or booster doses).
 \begin{figure}[H]
   \centering
   \includegraphics[width=.9\linewidth]{img (11).png}
-\caption*{Number of 1st, 2nd and booster doses}
+  \caption*{Number of 1st, 2nd and booster doses}
 \end{figure}
 
 \subsubsection{Total number of vaccines by date}
@@ -1123,7 +1129,7 @@ It shows the total number of administred doses in each day.
 \begin{figure}[H]
   \centering
   \includegraphics[width=1\linewidth]{img (12).png}
-\caption*{Total number of vaccines by date}
+  \caption*{Total number of vaccines by date}
 \end{figure}
 
 \subsubsection{Number of vaccines per gender in each region}
@@ -1131,7 +1137,7 @@ It shows the top 10 regions for number of administred doses divided by gender.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.9\linewidth]{img (14).png}
-\caption*{Number of vaccines per gender in each region}
+  \caption*{Number of vaccines per gender in each region}
 \end{figure}
 
 \subsubsection{Number of vaccinations by age range}
@@ -1139,17 +1145,17 @@ It shows the number of administred doses for each age range, sorted by number of
 \begin{figure}[H]
   \centering
   \includegraphics[width=.85\linewidth]{img (15).png}
-\caption*{Number of vaccinations by age range}
+  \caption*{Number of vaccinations by age range}
 \end{figure}
 
 \subsubsection{Number of people with previous infection in each region}
-It shows, for each region, the number of people who was infected by Covid-19 before doing the vaccination.
+It shows, for each region, the number of people who were infected by Covid-19 before 
+doing the vaccination.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.9\linewidth]{img (16).png}
-\caption*{Number of people with previous infection in each region}
+  \caption*{Number of people with previous infection in each region}
 \end{figure}
-
 
 \clearpage
 
