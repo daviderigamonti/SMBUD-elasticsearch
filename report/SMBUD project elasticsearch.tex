@@ -890,6 +890,8 @@ GET /index-healed,index-population/_search
 
 \subsubsection{Daily number of total cases, hospitalizations and positives}
 Returns, the total number of cases, hopitalizations and positives for each day. \\
+Given that this is not the total for a single day, but the overall total that is
+increased day by day. \\
 We used additional data from \emph{dpc-covid-19-ita-regioni.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
@@ -897,7 +899,7 @@ GET /index-covid-information/_search
 {
 "size": 0, 
   "aggs": {
-    "Administration date": {
+    "date": {
       "terms": {
         "field": "data",
         "size": 365,
@@ -908,17 +910,17 @@ GET /index-covid-information/_search
       "aggs": {
         "totalCases": {
           "sum": {
-            "field": "totale_casi"
+            "field": "total_case"
           }
         },        
         "totalPositive": {
           "sum": {
-            "field": "totale_positivi"
+            "field": "total_positive"
           }
         },        
         "totalHospitalized": {
           "sum": {
-            "field": "totale_ospedalizzati"
+            "field": "total_hospitalized"
           }
         }
       }
@@ -963,12 +965,12 @@ GET /index-vaccines_administrations/_search
           "aggs": {
             "total_positive": {
               "sum": {
-                "field": "totale_positivi"
+                "field": "total_positive"
               }
             },
             "total_hospitalized": {
               "sum": {
-                "field": "totale_ospedalizzati"
+                "field": "total_hospitalized"
               }
             },
             "percentage_positive_hospitalized": {
