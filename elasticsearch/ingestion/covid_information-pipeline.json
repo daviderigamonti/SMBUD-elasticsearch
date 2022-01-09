@@ -46,8 +46,100 @@
       }
     },
     {
+      "rename": {
+          "field": "data",
+          "target_field": "date"
+      }
+    },
+    {
+      "rename": {
+          "field": "stato",
+          "target_field": "state"
+      }
+    },
+    {
+      "rename": {
+          "field": "ricoverati_con_sintomi",
+          "target_field": "hospitalized_with_symptoms"
+      }
+    },
+    {
+      "rename": {
+          "field": "terapia_intensiva",
+          "target_field": "intensive_care"
+      }
+    },
+    {
+      "rename": {
+          "field": "totale_ospedalizzati",
+          "target_field": "total_hospitalized"
+      }
+    },
+    {
+      "rename": {
+          "field": "isolamento_domiciliare",
+          "target_field": "home_confinement"
+      }
+    },
+    {
+      "rename": {
+          "field": "totale_positivi",
+          "target_field": "total_positives"
+      }
+    },
+    {
+      "rename": {
+          "field": "variazione_totale_positivi",
+          "target_field": "total_positives_variation"
+      }
+    },
+    {
+      "rename": {
+          "field": "nuovi_positivi",
+          "target_field": "new_positives"
+      }
+    },
+    {
+      "rename": {
+          "field": "dimessi_guariti",
+          "target_field": "recovered"
+      }
+    },
+    {
+      "rename": {
+          "field": "deceduti",
+          "target_field": "deceased"
+      }
+    },
+    {
+      "rename": {
+          "field": "totale_casi",
+          "target_field": "total_cases"
+      }
+    },
+    {
+      "rename": {
+          "field": "tamponi",
+          "target_field": "tests"
+      }
+    },
+    {
+      "rename": {
+          "field": "note",
+          "target_field": "notes",
+          "ignore_missing": true
+      }
+    },
+    {
+      "rename": {
+          "field": "note_casi",
+          "target_field": "cases_notes",
+          "ignore_missing": true
+      }
+    },
+    {
       "date": {
-        "field": "data",
+        "field": "date",
         "timezone": "{{ event.timezone }}",
         "formats": [
           "ISO8601"
@@ -56,21 +148,21 @@
     },
     {
       "convert": {
-        "field": "deceduti",
+        "field": "deceased",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "dimessi_guariti",
+        "field": "recovered",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "isolamento_domiciliare",
+        "field": "home_confinement",
         "type": "long",
         "ignore_missing": true
       }
@@ -91,56 +183,56 @@
     },
     {
       "convert": {
-        "field": "nuovi_positivi",
+        "field": "new_positives",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "ricoverati_con_sintomi",
+        "field": "intensive_care",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "tamponi",
+        "field": "tests",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "terapia_intensiva",
+        "field": "intensive_care",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "totale_casi",
+        "field": "total_cases",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "totale_ospedalizzati",
+        "field": "total_hospitalized",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "totale_positivi",
+        "field": "total_positives",
         "type": "long",
         "ignore_missing": true
       }
     },
     {
       "convert": {
-        "field": "variazione_totale_positivi",
+        "field": "total_positives_variation",
         "type": "long",
         "ignore_missing": true
       }

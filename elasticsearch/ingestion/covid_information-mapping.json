@@ -6,20 +6,20 @@
     "ISTAT_region_code": {
       "type": "keyword"
     },
-    "data": {
+    "date": {
       "type": "date",
       "format": "iso8601"
     },
-    "deceduti": {
+    "deceased": {
       "type": "long"
     },
     "area_name": {
       "type": "text"
     },
-    "dimessi_guariti": {
+    "recovered": {
       "type": "long"
     },
-    "isolamento_domiciliare": {
+    "home_confinement": {
       "type": "long"
     },
     "lat": {
@@ -28,37 +28,37 @@
     "long": {
       "type": "double"
     },
-    "note": {
+    "notes": {
       "type": "text"
     },
-    "note_casi": {
+    "cases_notes": {
       "type": "text"
     },
-    "nuovi_positivi": {
+    "new_positives": {
       "type": "long"
     },
-    "ricoverati_con_sintomi": {
+    "hospitalized_with_symptoms": {
       "type": "long"
     },
-    "stato": {
+    "state": {
       "type": "keyword"
     },
-    "tamponi": {
+    "tests": {
       "type": "long"
     },
-    "terapia_intensiva": {
+    "intensive_care": {
       "type": "long"
     },
-    "totale_casi": {
+    "total_cases": {
       "type": "long"
     },
-    "totale_ospedalizzati": {
+    "total_hospitalized": {
       "type": "long"
     },
-    "totale_positivi": {
+    "total_positives": {
       "type": "long"
     },
-    "variazione_totale_positivi": {
+    "total_positives_variation": {
       "type": "long"
     },
     "location": {
