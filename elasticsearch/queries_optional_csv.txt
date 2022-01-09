@@ -1,10 +1,10 @@
 1) Percentage of fully vaccinated people per region
 2) Percentage of healed people per region
-3) Daily number of cases of positive and hospitalized people
+3) Daily total number of cases of positive and hospitalized people
 4) Ratio between positive and hospitalized people
 
 1)
-GET vaccinations_info,vaccinations_area/_search
+GET /index-vaccines_administrations,index-population/_search
 {
   "size": 0,
   "fields": [
@@ -57,7 +57,7 @@ GET vaccinations_info,vaccinations_area/_search
 }
 
 2)
-GET vaccinations_healed,vaccinations_area/_search
+GET /index-healed,index-population/_search
 {
   "size": 0,
   "fields": [
@@ -110,13 +110,13 @@ GET vaccinations_healed,vaccinations_area/_search
 }
 
 3)
-GET vaccinations_covid_info/_search
+GET /index-covid-information/_search
 {
 "size": 0, 
   "aggs": {
-    "Administration date": {
+    "date": {
       "terms": {
-        "field": "data",
+        "field": "date",
         "size": 365,
         "order": {
           "_key": "asc"
@@ -125,17 +125,17 @@ GET vaccinations_covid_info/_search
       "aggs": {
         "totalCases": {
           "sum": {
-            "field": "totale_casi"
+            "field": "total_case"
           }
         },        
         "totalPositive": {
           "sum": {
-            "field": "totale_positivi"
+            "field": "total_positive"
           }
         },        
         "totalHospitalized": {
           "sum": {
-            "field": "totale_ospedalizzati"
+            "field": "total_hospitalized"
           }
         }
       }
@@ -144,7 +144,7 @@ GET vaccinations_covid_info/_search
 }
 
 4)
-GET vaccinations_covid_info/_search
+GET /index-covid-information/_search
 {
   "size": 0,
   "fields": [
@@ -174,12 +174,12 @@ GET vaccinations_covid_info/_search
           "aggs": {
             "total_positive": {
               "sum": {
-                "field": "totale_positivi"
+                "field": "total_positive"
               }
             },
             "total_hospitalized": {
               "sum": {
-                "field": "totale_ospedalizzati"
+                "field": "total_hospitalized"
               }
             },
             "percentage_positive_hospitalized": {
