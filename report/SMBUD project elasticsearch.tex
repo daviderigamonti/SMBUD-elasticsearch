@@ -930,8 +930,8 @@ GET /index-covid-information/_search
 \end{tcolorbox}
 
 \subsubsection{Ratio between positive and hospitalized people}
-Returns the ratio between positive and hospitalized people for each region.
-\todo{ISTAT code da che index arriva?}
+Returns the ratio between positive and hospitalized people for each region. It is calculated using
+the data of \emph{dpc-covid19-ita-regioni.csv}.
 \begin{tcolorbox}[fontupper=\scriptsize]
   \begin{verbatim}
 GET /index-vaccines_administrations/_search 
@@ -1038,7 +1038,7 @@ POST /index-vaccines_administrations/_delete_by_query
 \section{Data Visualization with Kibana}
 
 We used the dashboard to give a visual representation of the most meaningful queries. \\
-In order to use this dashboard, you need to create three indexes (one for each csv file)
+In order to use this dashboard, you need to create three indexes, one for each csv file (\emph{somministrazioni-vaccini-latest.csv, platea.csv, soggetti-guariti.csv}),
 and name them respectively: "index-vaccines\_administrations", "index-population" and 
 "index-healed". \\
 Then, you need to add in the "index-patterns" section an aggregate index named "index"; 
