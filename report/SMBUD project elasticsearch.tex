@@ -87,8 +87,6 @@
     \tableofcontents
 }
 
-% LIST OF TODOs (REMOVE IN FINAL)
-\listoftodos
 
 \clearpage
 
@@ -105,7 +103,8 @@ The idea of the project is to use Elasticsearch to store and analyze data about
 COVID-19 vaccinations in Italy. The data we used can be found in the following 
 GitHub repository: \url{https://raw.githubusercontent.com/italia/covid19-opendata-vaccini/master/dati/somministrazioni-vaccini-latest.csv}
 and contains data about daily vaccinations divided by region, age range and vaccine
-supplier. \\ 
+supplier. \\ Moreover, we used three additional datasets to integrate other information 
+about the population of each region (\emph{platea.csv}), the number of healed people in each region (\emph{soggetti-guariti.csv}) and data about the number of daily covid cases (\emph{dpc-covid19-ita-regioni.csv}). \\
 The main goal is to analyze the data in order to build meaningful statistics 
 about the vaccinations in Italy; examples can be the total number of doses for each 
 vaccine brand, the top regions for vaccine administration and so on.
@@ -1084,7 +1083,7 @@ type (first, second, booster doses and so on) administered by that region.
 \end{figure}
 
 \subsubsection{Pie charts}
-The two pie charts represent the percentage of doses for each vaccine supploer and for 
+The two pie charts represent the percentage of doses for each vaccine supplier and for 
 each NUTS1 over the total administred vaccines.
 \begin{figure}[H]
   \centering
@@ -1188,7 +1187,7 @@ In our case the file has been renamed as \emph{vaccines\_administrations\_latest
 and a \\ unique ID generated using \emph{Python} \texttt{uuid.uuid4()} function 
 (from the \texttt{uuid} library) has been added as the first item for each row since
 HBase expects a row key in that particular position. \\ 
-The unique ID was generate in this way since an incremental sequential number as a 
+The unique ID was generated in this way since an incremental sequential number as a 
 row key is not recommended according to the \emph{HBase} documentation. 
 
 \noindent
